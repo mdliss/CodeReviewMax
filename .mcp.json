@@ -1,0 +1,15 @@
+{
+	"mcpServers": {
+		"task-master-ai": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"task-master-ai"
+			],
+			"env": {
+				"OPENAI_API_KEY": "${OPENAI_API_KEY}"
+			}
+		}
+	}
+}
