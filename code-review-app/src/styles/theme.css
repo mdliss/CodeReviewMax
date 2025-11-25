@@ -1,0 +1,29 @@
+/* src/styles/theme.css */
+
+:root, .dark {
+  --background: #121212;
+  --foreground: #ffffff;
+  --surface: #1e1e1e;
+  --surface-muted: #2a2a2a;
+  --border-color: #333333;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --text-muted: #6c6c6c;
+  --accent: #6366f1;
+  --accent-light: rgba(99, 102, 241, 0.1);
+  --error: #ef4444;
+}
+
+.light {
+  --background: #f7f7f7;
+  --foreground: #121212;
+  --surface: #ffffff;
+  --surface-muted: #e5e5e5;
+  --border-color: #d1d1d1;
+  --text-primary: #121212;
+  --text-secondary: #505050;
+  --text-muted: #8e8e8e;
+  --accent: #4f46e5;
+  --accent-light: rgba(79, 70, 229, 0.1);
+  --error: #dc2626;
+}

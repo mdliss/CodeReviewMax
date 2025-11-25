@@ -1,0 +1,164 @@
+/* Custom highlighting styles for Monaco Editor */
+
+.code-selection-highlight {
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+}
+
+.inline-code-highlight {
+  background: var(--accent-light);
+}
+
+.glyph-margin-highlight {
+  background: var(--accent);
+  width: 5px !important;
+  margin-left: 3px;
+}
+
+/* Thread decorations */
+.thread-range-highlight {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.thread-range-highlight--active {
+  background: rgba(99, 102, 241, 0.16);
+}
+
+.thread-line-decoration {
+  border-left: 2px solid rgba(99, 102, 241, 0.4);
+}
+
+.thread-line-decoration--active {
+  border-left: 3px solid rgba(99, 102, 241, 0.9);
+  background: linear-gradient(
+    180deg,
+    rgba(99, 102, 241, 0.08),
+    rgba(99, 102, 241, 0)
+  );
+}
+
+.thread-glyph {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 9999px;
+  background: rgba(99, 102, 241, 0.5);
+  margin-left: 4px;
+  margin-top: 4px;
+}
+
+.thread-glyph--active {
+  background: rgba(99, 102, 241, 0.95);
+  box-shadow: 0 0 6px rgba(99, 102, 241, 0.6);
+}
+
+.inline-thread-card-wrapper {
+  pointer-events: auto;
+}
+
+.inline-thread-card {
+  width: 320px;
+  max-width: 80vw;
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.35);
+  padding: 12px 14px;
+  color: var(--foreground);
+  font-family: var(--font-sans, 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+}
+
+.inline-thread-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.inline-thread-card__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.inline-thread-card__title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 2px 0 0;
+}
+
+.inline-thread-card__close {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 4px;
+  cursor: pointer;
+}
+
+.inline-thread-card__body {
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px;
+  background: var(--surface-muted);
+  max-height: 140px;
+  overflow: auto;
+}
+
+.inline-thread-card__author {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.inline-thread-card__text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+}
+
+.inline-thread-card__empty {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.inline-thread-card__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.inline-thread-card__button {
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+}
+
+.inline-thread-card__button:hover {
+  background: var(--accent-hover);
+}
+
+.inline-thread-card__footer button {
+  border: none;
+}
+
+/* Hide Monaco's native selection layer whenever we explicitly clear it */
+.monaco-editor.monaco-selection-hidden .selected-text {
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
