@@ -54,4 +54,26 @@ dev-debug.log
 
 # Task files
 # tasks.json
-# tasks/ 
+# tasks/
+
+# AI Assistant Configs (contain API keys/personal settings)
+.cursor/
+.gemini/
+.kilo/
+.kiro/
+.roo/
+.trae/
+.windsurf/
+.zed/
+.clinerules/
+opencode.json
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Task Master state
+.taskmaster/state.json
+
+# MCP configs (may contain API keys)
+.mcp.json
+**/mcp.json 
