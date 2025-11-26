@@ -2,40 +2,48 @@
   "master": {
     "tasks": [
       {
-        "id": 15,
+        "id": "15",
         "title": "Setup React SPA with Vite",
         "description": "Initialize a React Single Page Application using Vite as the build tool.",
         "details": "Use Vite to create a new React project. Ensure the project is set up with TypeScript support. Install necessary dependencies such as React, React-DOM, and Tailwind CSS for styling.",
         "testStrategy": "Verify the application builds and runs successfully with a basic React component rendering.",
         "priority": "medium",
         "dependencies": [],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [],
+        "complexity": 4,
+        "recommendedSubtasks": 2,
+        "expansionPrompt": "Consider breaking down the task into subtasks such as setting up the Vite project, configuring TypeScript, and integrating Tailwind CSS.",
+        "updatedAt": "2025-11-26T06:28:24.964Z"
       },
       {
-        "id": 16,
+        "id": "16",
         "title": "Integrate Monaco Editor",
         "description": "Integrate Monaco Editor into the React application for code editing capabilities.",
         "details": "Install @monaco-editor/react package. Create a component to render the Monaco Editor. Configure the editor for syntax highlighting and line numbers. Implement event listeners for selection changes using `onDidChangeCursorSelection`.",
         "testStrategy": "Test by pasting code into the editor and verifying syntax highlighting and line number display. Ensure selection events update the application state.",
         "priority": "medium",
         "dependencies": [
-          15
+          "15"
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [],
+        "complexity": 6,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "Consider subtasks for installing the package, creating the editor component, and configuring event listeners.",
+        "updatedAt": "2025-11-26T06:28:26.629Z"
       },
       {
-        "id": 17,
+        "id": "17",
         "title": "Implement AI Interaction Mechanism",
         "description": "Develop a mechanism to interact with AI APIs for code review suggestions.",
         "details": "Set up a function to package selected code, surrounding context, and user prompts. Use OpenAI SDK or a mock service to send requests. Implement a floating 'Ask AI' button that triggers the API call.",
         "testStrategy": "Mock API responses and verify that the AI's response references specific variables in the selected code block.",
         "priority": "medium",
         "dependencies": [
-          16
+          "16"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -44,7 +52,8 @@
             "dependencies": [],
             "details": "Create a function that collects selected code, its surrounding context, and user prompts. Use OpenAI SDK or a mock service to format and send requests.",
             "status": "pending",
-            "testStrategy": "Mock API responses to ensure correct packaging and sending of requests."
+            "testStrategy": "Mock API responses to ensure correct packaging and sending of requests.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -55,7 +64,8 @@
             ],
             "details": "Design and implement a floating 'Ask AI' button. Ensure it is accessible and triggers the API interaction function when clicked.",
             "status": "pending",
-            "testStrategy": "Verify button visibility and functionality, ensuring it triggers the API call."
+            "testStrategy": "Verify button visibility and functionality, ensuring it triggers the API call.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -66,21 +76,26 @@
             ],
             "details": "Implement a handler for API responses to parse and display suggestions. Ensure error handling and loading states are managed.",
             "status": "pending",
-            "testStrategy": "Test with mock responses to ensure correct parsing and display of AI suggestions."
+            "testStrategy": "Test with mock responses to ensure correct parsing and display of AI suggestions.",
+            "parentId": "undefined"
           }
-        ]
+        ],
+        "complexity": 7,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "Break down into subtasks for setting up API interactions, implementing the UI button, and handling API responses.",
+        "updatedAt": "2025-11-26T06:28:29.926Z"
       },
       {
-        "id": 18,
+        "id": "18",
         "title": "Develop Thread Management System",
         "description": "Create a system to manage conversation threads anchored to specific code lines.",
         "details": "Use Zustand for global state management. Implement a data model to store threads with line ranges and messages. Display visual indicators for threads in the editor gutter.",
         "testStrategy": "Create multiple threads and verify they are correctly anchored to the specified line ranges. Ensure clicking a thread indicator opens the correct chat history.",
         "priority": "medium",
         "dependencies": [
-          17
+          "17"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -89,7 +104,8 @@
             "dependencies": [],
             "details": "Install Zustand and create a store to manage thread states. Define actions for adding, updating, and removing threads.",
             "status": "pending",
-            "testStrategy": "Verify state updates correctly when threads are added or removed."
+            "testStrategy": "Verify state updates correctly when threads are added or removed.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -100,7 +116,8 @@
             ],
             "details": "Design a schema to represent threads, including properties for line range, messages, and metadata. Integrate with Zustand store.",
             "status": "pending",
-            "testStrategy": "Test data model by creating sample threads and checking data integrity."
+            "testStrategy": "Test data model by creating sample threads and checking data integrity.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -111,7 +128,8 @@
             ],
             "details": "Use React to create visual indicators for threads. Ensure indicators are positioned correctly based on line ranges.",
             "status": "pending",
-            "testStrategy": "Check that indicators appear at correct lines and respond to user interactions."
+            "testStrategy": "Check that indicators appear at correct lines and respond to user interactions.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -124,60 +142,77 @@
             ],
             "details": "Create test cases for adding, updating, and removing threads. Verify UI updates and state consistency.",
             "status": "pending",
-            "testStrategy": "Use automated tests to simulate user actions and validate system behavior."
+            "testStrategy": "Use automated tests to simulate user actions and validate system behavior.",
+            "parentId": "undefined"
           }
-        ]
+        ],
+        "complexity": 8,
+        "recommendedSubtasks": 4,
+        "expansionPrompt": "Consider subtasks for state management setup, data model implementation, UI integration, and testing.",
+        "updatedAt": "2025-11-26T06:28:34.832Z"
       },
       {
-        "id": 19,
+        "id": "19",
         "title": "Implement Application State Persistence",
         "description": "Persist application state using localStorage to maintain state across page reloads.",
         "details": "Serialize the current code and conversation threads to localStorage. On application load, deserialize and restore the state. Ensure state updates trigger localStorage updates.",
         "testStrategy": "Reload the page and verify that the code and threads are restored correctly from localStorage.",
         "priority": "medium",
         "dependencies": [
-          18
+          "18"
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [],
+        "complexity": 5,
+        "recommendedSubtasks": 2,
+        "expansionPrompt": "Consider subtasks for serialization logic, localStorage integration, and testing state restoration.",
+        "updatedAt": "2025-11-26T06:28:39.665Z"
       },
       {
-        "id": 20,
+        "id": "20",
         "title": "Design User Interface with Tailwind CSS",
         "description": "Design and style the user interface using Tailwind CSS for rapid development.",
         "details": "Create a responsive layout for the editor and thread management components. Use Tailwind CSS classes for styling. Ensure the UI is intuitive and accessible.",
         "testStrategy": "Perform UI testing to ensure components are styled correctly and the layout is responsive across different screen sizes.",
         "priority": "medium",
         "dependencies": [
-          15
+          "15"
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [],
+        "complexity": 5,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "Break down into subtasks for layout design, component styling, and responsive testing.",
+        "updatedAt": "2025-11-26T06:28:45.059Z"
       },
       {
-        "id": 21,
+        "id": "21",
         "title": "Implement Contextual AI Response Display",
         "description": "Display AI responses inline or visually connected to the code for context retention.",
         "details": "Develop a component to display AI responses next to the relevant code block. Ensure responses are visually connected to the code to maintain context. Implement loading states for AI responses.",
         "testStrategy": "Verify that AI responses appear correctly next to the code block and that loading indicators are displayed during API calls.",
         "priority": "medium",
         "dependencies": [
-          17
+          "17"
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [],
+        "complexity": 6,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "Consider subtasks for component development, visual integration, and loading state management.",
+        "updatedAt": "2025-11-26T06:28:49.232Z"
       },
       {
-        "id": 22,
+        "id": "22",
         "title": "Develop Smart Selection and Context Menu",
         "description": "Implement smart selection features and a context menu for code interactions.",
         "details": "Enable right-click context menu with options like 'Ask AI about this'. Implement smart selection features such as expanding selection to logical boundaries. Use Monaco's default selection behaviors for word and line selection.",
         "testStrategy": "Test the context menu appearance and functionality. Verify that smart selection correctly identifies function boundaries.",
         "priority": "medium",
         "dependencies": [
-          16
+          "16"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -186,7 +221,8 @@
             "dependencies": [],
             "details": "Create a context menu that appears on right-click, integrating options such as 'Ask AI about this'. Ensure compatibility with Monaco Editor's existing context menu.",
             "status": "pending",
-            "testStrategy": "Verify the context menu appears on right-click and options are selectable."
+            "testStrategy": "Verify the context menu appears on right-click and options are selectable.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -195,7 +231,8 @@
             "dependencies": [],
             "details": "Use Monaco's default selection behaviors to enhance selection logic. Implement functionality to expand selection to logical code boundaries, such as functions or blocks.",
             "status": "pending",
-            "testStrategy": "Test selection expansion to ensure it correctly identifies and selects logical code boundaries."
+            "testStrategy": "Test selection expansion to ensure it correctly identifies and selects logical code boundaries.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -207,41 +244,121 @@
             ],
             "details": "Perform comprehensive testing to ensure the context menu functions correctly and smart selection logic works as intended. Include edge cases and compatibility checks with Monaco Editor.",
             "status": "pending",
-            "testStrategy": "Test both features in various scenarios to ensure reliability and accuracy."
+            "testStrategy": "Test both features in various scenarios to ensure reliability and accuracy.",
+            "parentId": "undefined"
           }
-        ]
+        ],
+        "complexity": 7,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "Break down into subtasks for context menu implementation, smart selection logic, and testing.",
+        "updatedAt": "2025-11-26T06:33:27.217Z"
       },
       {
-        "id": 23,
+        "id": "23",
         "title": "Implement Keyboard Shortcuts",
         "description": "Add keyboard shortcuts for power user features and improved accessibility.",
         "details": "Implement shortcuts such as `Cmd/Ctrl+K` to open AI dialog, `Escape` to close modals, and `Cmd/Ctrl+Enter` to submit prompts. Ensure shortcuts are discoverable with tooltips.",
         "testStrategy": "Test all keyboard shortcuts to ensure they trigger the correct actions and improve user workflow efficiency.",
         "priority": "medium",
         "dependencies": [
-          16
+          "16"
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [],
+        "complexity": 4,
+        "recommendedSubtasks": 2,
+        "expansionPrompt": "Consider subtasks for defining shortcuts, implementing actions, and testing discoverability.",
+        "updatedAt": "2025-11-26T06:33:36.552Z"
       },
       {
-        "id": 24,
+        "id": "24",
         "title": "Setup AI Provider Configuration",
         "description": "Configure AI provider settings and allow switching between providers.",
         "details": "Create a settings panel for selecting AI providers and models. Implement API key input fields and a 'Test Connection' button. Store configuration in localStorage.",
         "testStrategy": "Test provider switching and API key validation. Ensure that the application can switch providers seamlessly and handle errors gracefully.",
         "priority": "medium",
         "dependencies": [
-          17
+          "17"
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [],
+        "complexity": 6,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "Consider subtasks for settings panel development, API key management, and provider switching logic.",
+        "updatedAt": "2025-11-26T06:36:37.019Z"
+      },
+      {
+        "id": "25",
+        "title": "Implement Follow-up Messages in Threads",
+        "description": "Enable users to continue conversations with AI on the same code block by adding a reply input field and displaying ongoing conversations.",
+        "details": "Integrate a reply input field within the thread panel when a thread is active. Ensure that follow-up messages include the full conversation history when sent to the AI. Utilize the existing AI interaction mechanism to handle message sending. Update the thread management system to append new messages to the conversation history and display them in real-time. Ensure the UI is styled using Tailwind CSS for consistency.",
+        "testStrategy": "1. Activate a thread and verify the presence of a reply input field. 2. Send a follow-up message and ensure it includes the full conversation history. 3. Confirm that the AI response is appended to the conversation thread. 4. Test UI responsiveness and styling consistency with Tailwind CSS. 5. Validate that the conversation updates in real-time without page reloads.",
+        "status": "done",
+        "dependencies": [
+          "17",
+          "18",
+          "21"
+        ],
+        "priority": "high",
+        "subtasks": [],
+        "updatedAt": "2025-11-26T07:47:26.904Z"
+      },
+      {
+        "id": "26",
+        "title": "Implement Streaming AI Responses",
+        "description": "Enable real-time streaming of AI responses using Server-Sent Events or chunked responses from APIs, with a typing indicator.",
+        "details": "Utilize Server-Sent Events (SSE) or chunked HTTP responses to stream AI responses from OpenAI or Anthropic APIs. Modify the existing AI interaction mechanism to handle streaming data. Implement a client-side event listener to process and display incoming data chunks in real-time. Add a typing indicator that updates as new text arrives. Ensure compatibility with the current AI response display system and maintain context with the code block. Use CSS animations for a smooth typing indicator experience.",
+        "testStrategy": "1. Simulate streaming responses from the AI API and verify that text appears incrementally in the UI. 2. Check that the typing indicator is visible and updates correctly as data streams in. 3. Test with different network speeds to ensure smooth performance. 4. Confirm that the final response is correctly formatted and contextually linked to the code block. 5. Ensure no data loss or UI glitches during the streaming process.",
+        "status": "done",
+        "dependencies": [
+          "17",
+          "21",
+          "25"
+        ],
+        "priority": "high",
+        "subtasks": [],
+        "updatedAt": "2025-11-26T08:33:25.681Z"
+      },
+      {
+        "id": "27",
+        "title": "Implement Export Threads as Markdown",
+        "description": "Add functionality to export conversation threads as markdown files, including code snippets, line numbers, and full conversation history.",
+        "details": "1. Add an 'Export as Markdown' button to the thread panel UI. \n2. Implement a function to gather the full conversation history, including code snippets and line numbers, from the thread management system. \n3. Format the gathered data into markdown syntax, ensuring code blocks are properly fenced and line numbers are included as comments. \n4. Use a library like `FileSaver.js` to handle file creation and download. \n5. Ensure the export function is accessible and performs efficiently, even with large threads.",
+        "testStrategy": "1. Create a conversation thread and use the export feature to download it as a markdown file. \n2. Verify that the markdown file includes all conversation messages, code snippets, and line numbers. \n3. Open the markdown file in a markdown viewer to ensure proper formatting. \n4. Test with threads of varying lengths and complexity to ensure consistent performance and output quality. \n5. Check the UI to ensure the export button is visible and functional.",
+        "status": "done",
+        "dependencies": [
+          "18",
+          "25"
+        ],
+        "priority": "medium",
+        "subtasks": [],
+        "updatedAt": "2025-11-26T08:37:26.951Z"
+      },
+      {
+        "id": "28",
+        "title": "Implement File Upload for Code Review",
+        "description": "Add functionality to upload code files from disk, supporting drag-and-drop and file picker, and configure Monaco editor based on file extension.",
+        "details": "1. Integrate a file input element and drag-and-drop area into the code review interface. Use HTML5 File API to handle file selection and drag-and-drop events. 2. Implement a function to read the file and detect its language based on the file extension. 3. Configure the Monaco editor to highlight syntax according to the detected language. 4. Ensure the UI provides feedback during file upload, such as progress indicators or success messages. 5. Handle errors gracefully, such as unsupported file types or read failures, and provide user feedback.",
+        "testStrategy": "1. Test file upload using both the file picker and drag-and-drop methods with various file types. 2. Verify that the Monaco editor correctly highlights syntax based on the file extension. 3. Test error handling by attempting to upload unsupported file types and ensure appropriate error messages are displayed. 4. Check UI responsiveness and feedback during the upload process. 5. Validate that large files are handled efficiently without performance degradation.",
+        "status": "done",
+        "dependencies": [
+          "17",
+          "21",
+          "22"
+        ],
+        "priority": "medium",
+        "subtasks": [],
+        "updatedAt": "2025-11-26T08:39:39.979Z"
       }
     ],
     "metadata": {
-      "created": "2025-11-24T09:24:59.746Z",
-      "updated": "2025-11-26T06:02:03.179Z",
-      "description": "Tasks for master context"
+      "version": "1.0.0",
+      "lastModified": "2025-11-26T08:39:39.980Z",
+      "taskCount": 14,
+      "completedCount": 14,
+      "tags": [
+        "master"
+      ]
     }
   }
 }
