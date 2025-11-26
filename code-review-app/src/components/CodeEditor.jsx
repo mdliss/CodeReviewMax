@@ -6,7 +6,7 @@ import '../styles/editor.css';
 
 const NATIVE_SELECTION_HIDDEN_CLASS = 'monaco-selection-hidden';
 
-const CodeEditor = ({ onSelectionChange, onCodeChange, theme }) => {
+const CodeEditor = ({ onSelectionChange, onCodeChange, theme, onAskAI, language = 'javascript', value }) => {
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
   const containerRef = useRef(null);
@@ -15,6 +15,7 @@ const CodeEditor = ({ onSelectionChange, onCodeChange, theme }) => {
   const editorDisposablesRef = useRef([]);
   const [selection, setSelection] = useState(null);
   const [inlineCardThreadId, setInlineCardThreadId] = useState(null);
+  const [contextMenu, setContextMenu] = useState(null);
   const decorationsRef = useRef([]);
   const threadDecorationsRef = useRef([]);
   const inlineWidgetRef = useRef(null);
@@ -22,6 +23,7 @@ const CodeEditor = ({ onSelectionChange, onCodeChange, theme }) => {
   const threads = useEditorStore((state) => state.threads);
   const activeThreadId = useEditorStore((state) => state.activeThreadId);
   const setActiveThread = useEditorStore((state) => state.setActiveThread);
+  const clearActiveThread = useEditorStore((state) => state.clearActiveThread);
   activeThreadIdRef.current = activeThreadId;
 
   const removeInlineWidget = () => {
@@ -203,6 +205,105 @@ const CodeEditor = ({ onSelectionChange, onCodeChange, theme }) => {
     if (!domNode) return;
     domNode.classList.toggle(NATIVE_SELECTION_HIDDEN_CLASS, Boolean(shouldHide));
   };
+
+  // Find function/class boundaries around a given line
+  const findBlockBoundaries = (lineNumber) => {
+    if (!editorRef.current) return null;
+    const model = editorRef.current.getModel();
+    if (!model) return null;
+
+    const lineCount = model.getLineCount();
+    let startLine = lineNumber;
+    let endLine = lineNumber;
+    let braceCount = 0;
+    let foundStart = false;
+
+    // Search backwards for function/class start
+    for (let i = lineNumber; i >= 1; i--) {
+      const lineContent = model.getLineContent(i);
+
+      // Check for function/class/method declarations
+      const isFunctionStart = /^\s*(async\s+)?(function|class|const|let|var)\s+\w+|^\s*\w+\s*[=:]\s*(async\s*)?\(|^\s*\w+\s*\([^)]*\)\s*{/.test(lineContent);
+      const isMethodStart = /^\s*(async\s+)?\w+\s*\([^)]*\)\s*{/.test(lineContent);
+      const isArrowFunction = /^\s*(const|let|var)\s+\w+\s*=\s*(async\s*)?\([^)]*\)\s*=>/.test(lineContent);
+
+      if (isFunctionStart || isMethodStart || isArrowFunction) {
+        startLine = i;
+        foundStart = true;
+        break;
+      }
+    }
+
+    if (!foundStart) return null;
+
+    // Now find the matching closing brace
+    braceCount = 0;
+    let foundOpenBrace = false;
+
+    for (let i = startLine; i <= lineCount; i++) {
+      const lineContent = model.getLineContent(i);
+
+      for (const char of lineContent) {
+        if (char === '{') {
+          braceCount++;
+          foundOpenBrace = true;
+        } else if (char === '}') {
+          braceCount--;
+        }
+      }
+
+      if (foundOpenBrace && braceCount === 0) {
+        endLine = i;
+        break;
+      }
+    }
+
+    return { startLine, endLine };
+  };
+
+  // Expand selection to function boundary
+  const expandSelectionToFunction = () => {
+    if (!editorRef.current || !monacoRef.current) return;
+
+    const currentSelection = editorRef.current.getSelection();
+    if (!currentSelection) return;
+
+    const boundaries = findBlockBoundaries(currentSelection.startLineNumber);
+    if (!boundaries) return;
+
+    const SelectionCtor = monacoRef.current.Selection || monacoRef.current.editor?.Selection;
+    if (!SelectionCtor) return;
+
+    const model = editorRef.current.getModel();
+    const endLineContent = model.getLineContent(boundaries.endLine);
+
+    const newSelection = new SelectionCtor(
+      boundaries.startLine,
+      1,
+      boundaries.endLine,
+      endLineContent.length + 1
+    );
+
+    editorRef.current.setSelection(newSelection);
+    editorRef.current.revealLineInCenter(boundaries.startLine);
+    toggleNativeSelectionVisibility(false);
+  };
+
+  // Close context menu on click outside
+  useEffect(() => {
+    if (!contextMenu) return;
+
+    const handleClick = () => setContextMenu(null);
+    const handleScroll = () => setContextMenu(null);
+
+    document.addEventListener('click', handleClick);
+    document.addEventListener('scroll', handleScroll, true);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+      document.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [contextMenu]);
 
   // Update editor read-only state when it changes
   useEffect(() => {
@@ -388,6 +489,43 @@ const CodeEditor = ({ onSelectionChange, onCodeChange, theme }) => {
       () => navigateThreads('prev')
     );
 
+    // Cmd/Ctrl+K to open AI dialog
+    editor.addCommand(
+      monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK,
+      () => {
+        const currentSel = editor.getSelection();
+        if (currentSel && !currentSel.isEmpty() && onAskAI) {
+          onAskAI();
+        }
+      }
+    );
+
+    // Escape to clear active thread and close context menu
+    editor.addCommand(
+      monaco.KeyCode.Escape,
+      () => {
+        setContextMenu(null);
+        setInlineCardThreadId(null);
+        if (activeThreadIdRef.current) {
+          clearActiveThread();
+        }
+      }
+    );
+
+    // Context menu on right-click
+    const contextMenuDisposable = editor.onContextMenu((e) => {
+      const currentSel = editor.getSelection();
+      if (currentSel && !currentSel.isEmpty()) {
+        e.event.preventDefault();
+        e.event.stopPropagation();
+        setContextMenu({
+          x: e.event.posx,
+          y: e.event.posy,
+        });
+      }
+    });
+    disposables.push(contextMenuDisposable);
+
     const disposeOnEditorDispose = editor.onDidDispose(() => {
       disposables.forEach((disposable) => disposable?.dispose?.());
     });
@@ -466,6 +604,33 @@ calc.add(10).multiply(2).subtract(5);
 console.log('Result:', calc.getResult());
 `;
 
+  const handleContextMenuAskAI = (e) => {
+    e.stopPropagation();
+    setContextMenu(null);
+    if (onAskAI) {
+      onAskAI();
+    }
+  };
+
+  const handleContextMenuExpand = (e) => {
+    e.stopPropagation();
+    setContextMenu(null);
+    expandSelectionToFunction();
+  };
+
+  const handleContextMenuCopy = (e) => {
+    e.stopPropagation();
+    setContextMenu(null);
+    if (editorRef.current) {
+      const selection = editorRef.current.getSelection();
+      const model = editorRef.current.getModel();
+      if (selection && model) {
+        const text = model.getValueInRange(selection);
+        navigator.clipboard.writeText(text);
+      }
+    }
+  };
+
   return (
     <div
       ref={containerRef}
@@ -474,8 +639,8 @@ console.log('Result:', calc.getResult());
     >
       <Editor
         height="100%"
-        defaultLanguage="javascript"
-        defaultValue={defaultValue}
+        language={language}
+        value={value !== undefined ? value : defaultValue}
         theme={theme === 'dark' ? 'vs-dark' : 'light'}
         onMount={handleEditorDidMount}
         options={{
@@ -505,8 +670,57 @@ console.log('Result:', calc.getResult());
           fastScrollSensitivity: 5,
           mouseWheelZoom: false,
           overviewRulerLanes: 3,
+          contextmenu: false, // Disable default context menu
         }}
       />
+
+      {/* Custom Context Menu */}
+      {contextMenu && (
+        <div
+          className="context-menu"
+          style={{
+            position: 'fixed',
+            left: contextMenu.x,
+            top: contextMenu.y,
+            zIndex: 9999,
+          }}
+          data-preserve-selection="true"
+        >
+          <button
+            className="context-menu-item"
+            onClick={handleContextMenuAskAI}
+            data-preserve-selection="true"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+            <span>Ask AI</span>
+            <kbd className="context-menu-shortcut">⌘K</kbd>
+          </button>
+          <button
+            className="context-menu-item"
+            onClick={handleContextMenuExpand}
+            data-preserve-selection="true"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+            <span>Expand to Function</span>
+          </button>
+          <div className="context-menu-divider" />
+          <button
+            className="context-menu-item"
+            onClick={handleContextMenuCopy}
+            data-preserve-selection="true"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            <span>Copy</span>
+            <kbd className="context-menu-shortcut">⌘C</kbd>
+          </button>
+        </div>
+      )}
     </div>
   );
 };
