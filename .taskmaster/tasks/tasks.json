@@ -2,611 +2,246 @@
   "master": {
     "tasks": [
       {
-        "id": 1,
-        "title": "Setup React Project with Vite",
-        "description": "Initialize a new React project using Vite as the build tool.",
-        "details": "Use the command `npm create vite@latest` to set up a new React project. Configure the project structure and ensure all necessary dependencies are installed.",
-        "testStrategy": "Verify the project builds successfully and the development server runs without errors.",
+        "id": 15,
+        "title": "Setup React SPA with Vite",
+        "description": "Initialize a React Single Page Application using Vite as the build tool.",
+        "details": "Use Vite to create a new React project. Ensure the project is set up with TypeScript support. Install necessary dependencies such as React, React-DOM, and Tailwind CSS for styling.",
+        "testStrategy": "Verify the application builds and runs successfully with a basic React component rendering.",
         "priority": "medium",
         "dependencies": [],
-        "status": "done",
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 16,
+        "title": "Integrate Monaco Editor",
+        "description": "Integrate Monaco Editor into the React application for code editing capabilities.",
+        "details": "Install @monaco-editor/react package. Create a component to render the Monaco Editor. Configure the editor for syntax highlighting and line numbers. Implement event listeners for selection changes using `onDidChangeCursorSelection`.",
+        "testStrategy": "Test by pasting code into the editor and verifying syntax highlighting and line number display. Ensure selection events update the application state.",
+        "priority": "medium",
+        "dependencies": [
+          15
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 17,
+        "title": "Implement AI Interaction Mechanism",
+        "description": "Develop a mechanism to interact with AI APIs for code review suggestions.",
+        "details": "Set up a function to package selected code, surrounding context, and user prompts. Use OpenAI SDK or a mock service to send requests. Implement a floating 'Ask AI' button that triggers the API call.",
+        "testStrategy": "Mock API responses and verify that the AI's response references specific variables in the selected code block.",
+        "priority": "medium",
+        "dependencies": [
+          16
+        ],
+        "status": "pending",
         "subtasks": [
           {
             "id": 1,
-            "title": "Initialize Vite Project",
-            "description": "Run the command to create a new Vite project.",
+            "title": "Set Up API Interaction Function",
+            "description": "Develop a function to package code, context, and prompts for API requests.",
             "dependencies": [],
-            "details": "Use `npm create vite@latest` to initialize the project.",
+            "details": "Create a function that collects selected code, its surrounding context, and user prompts. Use OpenAI SDK or a mock service to format and send requests.",
             "status": "pending",
-            "testStrategy": "Ensure the command runs without errors.",
-            "parentId": "undefined"
+            "testStrategy": "Mock API responses to ensure correct packaging and sending of requests."
           },
           {
             "id": 2,
-            "title": "Configure Project Structure",
-            "description": "Set up the initial project structure for the React app.",
+            "title": "Implement 'Ask AI' Floating Button",
+            "description": "Create a UI button to trigger AI API calls.",
             "dependencies": [
               1
             ],
-            "details": "Organize folders and files according to best practices.",
+            "details": "Design and implement a floating 'Ask AI' button. Ensure it is accessible and triggers the API interaction function when clicked.",
             "status": "pending",
-            "testStrategy": "Verify the structure matches the project requirements.",
-            "parentId": "undefined"
+            "testStrategy": "Verify button visibility and functionality, ensuring it triggers the API call."
           },
           {
             "id": 3,
-            "title": "Install Necessary Dependencies",
-            "description": "Install all required dependencies for the React project.",
+            "title": "Handle API Responses",
+            "description": "Develop logic to process and display AI API responses.",
             "dependencies": [
               1
             ],
-            "details": "Use `npm install` to add necessary packages.",
+            "details": "Implement a handler for API responses to parse and display suggestions. Ensure error handling and loading states are managed.",
             "status": "pending",
-            "testStrategy": "Check that all dependencies are installed correctly.",
-            "parentId": "undefined"
+            "testStrategy": "Test with mock responses to ensure correct parsing and display of AI suggestions."
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Develop Thread Management System",
+        "description": "Create a system to manage conversation threads anchored to specific code lines.",
+        "details": "Use Zustand for global state management. Implement a data model to store threads with line ranges and messages. Display visual indicators for threads in the editor gutter.",
+        "testStrategy": "Create multiple threads and verify they are correctly anchored to the specified line ranges. Ensure clicking a thread indicator opens the correct chat history.",
+        "priority": "medium",
+        "dependencies": [
+          17
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set Up Zustand for Global State Management",
+            "description": "Initialize Zustand to manage global state for conversation threads.",
+            "dependencies": [],
+            "details": "Install Zustand and create a store to manage thread states. Define actions for adding, updating, and removing threads.",
+            "status": "pending",
+            "testStrategy": "Verify state updates correctly when threads are added or removed."
+          },
+          {
+            "id": 2,
+            "title": "Implement Data Model for Threads",
+            "description": "Create a data model to store conversation threads with line ranges and messages.",
+            "dependencies": [
+              1
+            ],
+            "details": "Design a schema to represent threads, including properties for line range, messages, and metadata. Integrate with Zustand store.",
+            "status": "pending",
+            "testStrategy": "Test data model by creating sample threads and checking data integrity."
+          },
+          {
+            "id": 3,
+            "title": "Integrate UI for Thread Indicators",
+            "description": "Develop UI components to display thread indicators in the editor gutter.",
+            "dependencies": [
+              2
+            ],
+            "details": "Use React to create visual indicators for threads. Ensure indicators are positioned correctly based on line ranges.",
+            "status": "pending",
+            "testStrategy": "Check that indicators appear at correct lines and respond to user interactions."
           },
           {
             "id": 4,
-            "title": "Set Up Development Environment",
-            "description": "Configure the development environment for the project.",
+            "title": "Conduct Comprehensive Testing",
+            "description": "Perform testing to ensure the thread management system functions correctly.",
             "dependencies": [
+              1,
               2,
               3
             ],
-            "details": "Ensure the development server runs and hot reloading is enabled.",
+            "details": "Create test cases for adding, updating, and removing threads. Verify UI updates and state consistency.",
             "status": "pending",
-            "testStrategy": "Run the development server and check for errors.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 5,
-            "title": "Verify Project Setup",
-            "description": "Ensure the project builds and runs correctly.",
-            "dependencies": [
-              4
-            ],
-            "details": "Build the project and start the development server.",
-            "status": "pending",
-            "testStrategy": "Verify the project builds successfully and the server runs without errors.",
-            "parentId": "undefined"
+            "testStrategy": "Use automated tests to simulate user actions and validate system behavior."
           }
-        ],
-        "complexity": 3,
-        "recommendedSubtasks": 0,
-        "expansionPrompt": "No expansion needed for this task.",
-        "updatedAt": "2025-11-23T08:41:13.351Z"
+        ]
       },
       {
-        "id": 2,
-        "title": "Integrate Monaco Editor",
-        "description": "Integrate the Monaco Editor into the React application for code editing capabilities.",
-        "details": "Install `@monaco-editor/react` and configure it within the main component. Ensure syntax highlighting and line numbers are enabled. Handle `onDidChangeCursorSelection` events to update the application state.",
-        "testStrategy": "Test with a sample code snippet to ensure syntax highlighting and selection events work as expected.",
-        "priority": "high",
-        "dependencies": [
-          "1"
-        ],
-        "status": "done",
-        "subtasks": [
-          {
-            "id": 1,
-            "title": "Install and Configure Monaco Editor",
-            "description": "Install the Monaco Editor package and configure it within the React application.",
-            "dependencies": [],
-            "details": "Install `@monaco-editor/react` using npm or yarn. Import and configure it in the main component. Ensure syntax highlighting and line numbers are enabled by setting the appropriate options.",
-            "status": "pending",
-            "testStrategy": "Verify the editor loads with syntax highlighting and line numbers.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 2,
-            "title": "Implement Event Handling for Editor",
-            "description": "Handle editor events to update the application state based on user interactions.",
-            "dependencies": [
-              1
-            ],
-            "details": "Use the `onDidChangeCursorSelection` event to track cursor movements. Update the application state with the current selection details whenever the event is triggered.",
-            "status": "pending",
-            "testStrategy": "Test by selecting text in the editor and ensure the application state updates accordingly.",
-            "parentId": "undefined"
-          }
-        ],
-        "complexity": 6,
-        "recommendedSubtasks": 2,
-        "expansionPrompt": "Consider breaking down the task into subtasks such as 'Install and Configure Monaco Editor' and 'Implement Event Handling for Editor'.",
-        "updatedAt": "2025-11-23T08:44:24.195Z"
-      },
-      {
-        "id": 3,
-        "title": "Implement Code Selection and Highlighting",
-        "description": "Enable users to select code ranges and highlight them within the editor.",
-        "details": "Utilize Monaco Editor's API to track and highlight selected code ranges. Update the application state with the current selection details.",
-        "testStrategy": "Select various code ranges and verify that the selection is accurately reflected in the application state.",
-        "priority": "high",
-        "dependencies": [
-          "2"
-        ],
-        "status": "done",
-        "subtasks": [
-          {
-            "id": 1,
-            "title": "Implement Selection Tracking",
-            "description": "Track user code selections using Monaco Editor's API.",
-            "dependencies": [
-              2
-            ],
-            "details": "Use the `onDidChangeCursorSelection` event from Monaco Editor to detect and track code selections. Update the application state with the selection details to ensure accurate tracking.",
-            "status": "pending",
-            "testStrategy": "Select various code ranges and verify that the selection is accurately reflected in the application state.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 2,
-            "title": "Develop Highlighting Logic",
-            "description": "Implement logic to highlight selected code ranges in the editor.",
-            "dependencies": [
-              1
-            ],
-            "details": "Utilize Monaco Editor's decoration API to apply visual highlights to the selected code ranges. Ensure that highlights update dynamically as selections change.",
-            "status": "pending",
-            "testStrategy": "Select and highlight code ranges, ensuring that the highlights appear correctly and update with changes.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 3,
-            "title": "Implement Selection Tracking",
-            "description": "Track user code selections using Monaco Editor's API.",
-            "dependencies": [
-              2
-            ],
-            "details": "Use the `onDidChangeCursorSelection` event to detect changes in the selection. Update the application state with the current selection range.",
-            "status": "pending",
-            "testStrategy": "Select various code ranges and verify state updates.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 4,
-            "title": "Develop Highlighting Logic",
-            "description": "Implement logic to highlight selected code ranges in the editor.",
-            "dependencies": [
-              3
-            ],
-            "details": "Utilize Monaco Editor's decoration API to apply highlighting to selected ranges. Ensure the highlighting updates dynamically with selection changes.",
-            "status": "pending",
-            "testStrategy": "Highlight selected ranges and verify visual updates in the editor.",
-            "parentId": "undefined"
-          }
-        ],
-        "complexity": 7,
-        "recommendedSubtasks": 2,
-        "expansionPrompt": "Break down into 'Implement Selection Tracking' and 'Develop Highlighting Logic'.",
-        "updatedAt": "2025-11-23T08:47:12.056Z"
-      },
-      {
-        "id": 4,
-        "title": "Develop AI Interaction Mechanism",
-        "description": "Create a mechanism to interact with the AI API using selected code snippets.",
-        "details": "Implement a function to package the selected code and surrounding context. Use a floating 'Ask AI' button to trigger API calls to OpenAI or a mock service. Ensure the prompt clearly differentiates selected code from the rest.",
-        "testStrategy": "Mock API responses and verify that the AI interaction mechanism correctly sends and receives data.",
-        "priority": "high",
-        "dependencies": [
-          "3"
-        ],
-        "status": "done",
-        "subtasks": [
-          {
-            "id": 1,
-            "title": "Design API Request Structure",
-            "description": "Create a structured format for API requests to the AI service.",
-            "dependencies": [],
-            "details": "Define the JSON schema for requests, including fields for selected code, context, and user metadata. Ensure compatibility with OpenAI's API requirements.",
-            "status": "pending",
-            "testStrategy": "Validate request structure against API documentation.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 2,
-            "title": "Implement AI Button UI",
-            "description": "Develop the UI for the floating 'Ask AI' button.",
-            "dependencies": [],
-            "details": "Use React to create a floating button component. Ensure it is styled with Tailwind CSS and is responsive across devices. Integrate click events to trigger API calls.",
-            "status": "pending",
-            "testStrategy": "Test button responsiveness and click event functionality.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 3,
-            "title": "Handle API Responses",
-            "description": "Implement logic to process and display responses from the AI API.",
-            "dependencies": [
-              1
-            ],
-            "details": "Parse the API response and update the UI with AI-generated suggestions. Handle errors gracefully and provide user feedback.",
-            "status": "pending",
-            "testStrategy": "Mock API responses to test parsing and UI updates.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 4,
-            "title": "Design API Request Structure",
-            "description": "Create a structured format for API requests to interact with the AI.",
-            "dependencies": [],
-            "details": "Define the JSON structure for the API request, ensuring it includes the selected code, context, and any necessary metadata.",
-            "status": "pending",
-            "testStrategy": "Validate the JSON structure against mock API endpoints.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 5,
-            "title": "Implement AI Button UI",
-            "description": "Develop the UI for the floating 'Ask AI' button.",
-            "dependencies": [],
-            "details": "Use HTML, CSS, and JavaScript to create a responsive button that triggers the API call when clicked.",
-            "status": "pending",
-            "testStrategy": "Ensure the button is visible and functional across different screen sizes.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 6,
-            "title": "Handle API Responses",
-            "description": "Implement logic to process and display responses from the AI API.",
-            "dependencies": [
-              4
-            ],
-            "details": "Parse the API response and update the UI to display the AI's output. Handle errors and loading states gracefully.",
-            "status": "pending",
-            "testStrategy": "Mock API responses and verify correct UI updates.",
-            "parentId": "undefined"
-          }
-        ],
-        "complexity": 8,
-        "recommendedSubtasks": 3,
-        "expansionPrompt": "Consider subtasks like 'Design API Request Structure', 'Implement AI Button UI', and 'Handle API Responses'.",
-        "updatedAt": "2025-11-23T08:50:33.969Z"
-      },
-      {
-        "id": 5,
-        "title": "Design Thread Management System",
-        "description": "Implement a system to manage multiple conversation threads anchored to specific code lines.",
-        "details": "Use Zustand for state management. Create a data structure to store threads with line ranges and messages. Implement visual indicators for active threads in the editor.",
-        "testStrategy": "Create multiple threads and verify they are correctly anchored and displayed in the UI.",
+        "id": 19,
+        "title": "Implement Application State Persistence",
+        "description": "Persist application state using localStorage to maintain state across page reloads.",
+        "details": "Serialize the current code and conversation threads to localStorage. On application load, deserialize and restore the state. Ensure state updates trigger localStorage updates.",
+        "testStrategy": "Reload the page and verify that the code and threads are restored correctly from localStorage.",
         "priority": "medium",
         "dependencies": [
-          "4"
+          18
         ],
-        "status": "done",
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 20,
+        "title": "Design User Interface with Tailwind CSS",
+        "description": "Design and style the user interface using Tailwind CSS for rapid development.",
+        "details": "Create a responsive layout for the editor and thread management components. Use Tailwind CSS classes for styling. Ensure the UI is intuitive and accessible.",
+        "testStrategy": "Perform UI testing to ensure components are styled correctly and the layout is responsive across different screen sizes.",
+        "priority": "medium",
+        "dependencies": [
+          15
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 21,
+        "title": "Implement Contextual AI Response Display",
+        "description": "Display AI responses inline or visually connected to the code for context retention.",
+        "details": "Develop a component to display AI responses next to the relevant code block. Ensure responses are visually connected to the code to maintain context. Implement loading states for AI responses.",
+        "testStrategy": "Verify that AI responses appear correctly next to the code block and that loading indicators are displayed during API calls.",
+        "priority": "medium",
+        "dependencies": [
+          17
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 22,
+        "title": "Develop Smart Selection and Context Menu",
+        "description": "Implement smart selection features and a context menu for code interactions.",
+        "details": "Enable right-click context menu with options like 'Ask AI about this'. Implement smart selection features such as expanding selection to logical boundaries. Use Monaco's default selection behaviors for word and line selection.",
+        "testStrategy": "Test the context menu appearance and functionality. Verify that smart selection correctly identifies function boundaries.",
+        "priority": "medium",
+        "dependencies": [
+          16
+        ],
+        "status": "pending",
         "subtasks": [
           {
             "id": 1,
-            "title": "Design Data Structure for Threads",
-            "description": "Create a data structure to store conversation threads with line ranges and messages.",
+            "title": "Implement Context Menu with AI Options",
+            "description": "Develop a right-click context menu with options like 'Ask AI about this'.",
             "dependencies": [],
-            "details": "Design a data structure that efficiently stores thread information, including line ranges and associated messages. Ensure it supports quick retrieval and updates.",
+            "details": "Create a context menu that appears on right-click, integrating options such as 'Ask AI about this'. Ensure compatibility with Monaco Editor's existing context menu.",
             "status": "pending",
-            "testStrategy": "Verify data structure handles multiple threads and updates correctly.",
-            "parentId": "undefined"
+            "testStrategy": "Verify the context menu appears on right-click and options are selectable."
           },
           {
             "id": 2,
-            "title": "Implement State Management with Zustand",
-            "description": "Set up Zustand for managing the state of conversation threads.",
-            "dependencies": [
-              1
-            ],
-            "details": "Integrate Zustand into the project to manage the state of threads. Ensure state updates are efficient and reflect changes in the UI.",
+            "title": "Develop Smart Selection Logic",
+            "description": "Implement smart selection features to expand selection to logical boundaries.",
+            "dependencies": [],
+            "details": "Use Monaco's default selection behaviors to enhance selection logic. Implement functionality to expand selection to logical code boundaries, such as functions or blocks.",
             "status": "pending",
-            "testStrategy": "Test state updates by adding, modifying, and removing threads.",
-            "parentId": "undefined"
+            "testStrategy": "Test selection expansion to ensure it correctly identifies and selects logical code boundaries."
           },
           {
             "id": 3,
-            "title": "Develop UI for Thread Indicators",
-            "description": "Create visual indicators for active threads in the code editor.",
+            "title": "Test Context Menu and Smart Selection Features",
+            "description": "Conduct testing for the context menu and smart selection features.",
             "dependencies": [
               1,
               2
             ],
-            "details": "Design and implement UI components to display active thread indicators in the editor. Ensure they are intuitive and responsive.",
+            "details": "Perform comprehensive testing to ensure the context menu functions correctly and smart selection logic works as intended. Include edge cases and compatibility checks with Monaco Editor.",
             "status": "pending",
-            "testStrategy": "Check that indicators appear correctly for active threads and update in real-time.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 4,
-            "title": "Design Data Structure for Threads",
-            "description": "Create a data structure to store conversation threads with line ranges and messages.",
-            "dependencies": [],
-            "details": "Design a data structure that efficiently stores thread information, including line ranges and associated messages. Ensure it supports quick retrieval and updates.",
-            "status": "pending",
-            "testStrategy": "Verify data structure handles multiple threads with overlapping line ranges.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 5,
-            "title": "Implement State Management with Zustand",
-            "description": "Set up Zustand for managing the state of conversation threads.",
-            "dependencies": [
-              4
-            ],
-            "details": "Integrate Zustand into the project to manage the state of threads. Ensure state updates are efficient and reflect changes in the UI.",
-            "status": "pending",
-            "testStrategy": "Test state updates by adding, modifying, and deleting threads.",
-            "parentId": "undefined"
-          },
-          {
-            "id": 6,
-            "title": "Develop UI for Thread Indicators",
-            "description": "Create visual indicators for active threads in the code editor.",
-            "dependencies": [
-              5
-            ],
-            "details": "Design and implement UI components to display thread indicators in the editor. Ensure they are intuitive and non-intrusive.",
-            "status": "pending",
-            "testStrategy": "Check that indicators appear correctly for active threads and update as threads change.",
-            "parentId": "undefined"
+            "testStrategy": "Test both features in various scenarios to ensure reliability and accuracy."
           }
-        ],
-        "complexity": 7,
-        "recommendedSubtasks": 3,
-        "expansionPrompt": "Subtasks could include 'Design Data Structure for Threads', 'Implement State Management with Zustand', and 'Develop UI for Thread Indicators'.",
-        "updatedAt": "2025-11-23T08:53:13.593Z"
+        ]
       },
       {
-        "id": 6,
-        "title": "Implement Application State Persistence",
-        "description": "Persist application state using localStorage to maintain code and threads across sessions.",
-        "details": "Serialize the current state of code and threads to localStorage on changes. On application load, deserialize and restore the state.",
-        "testStrategy": "Reload the application and verify that the code and threads persist as expected.",
+        "id": 23,
+        "title": "Implement Keyboard Shortcuts",
+        "description": "Add keyboard shortcuts for power user features and improved accessibility.",
+        "details": "Implement shortcuts such as `Cmd/Ctrl+K` to open AI dialog, `Escape` to close modals, and `Cmd/Ctrl+Enter` to submit prompts. Ensure shortcuts are discoverable with tooltips.",
+        "testStrategy": "Test all keyboard shortcuts to ensure they trigger the correct actions and improve user workflow efficiency.",
         "priority": "medium",
         "dependencies": [
-          "5"
+          16
         ],
-        "status": "done",
-        "subtasks": [
-          {
-            "id": 1,
-            "title": "Implement State Serialization",
-            "description": "Serialize the current state of code and threads to localStorage on changes.",
-            "dependencies": [],
-            "details": "Use JSON.stringify to convert the application state into a string format suitable for storage. Ensure that changes in code and threads trigger the serialization process.\n<info added on 2025-11-23T08:55:27.582Z>\nSuccessfully implemented state serialization using Zustand's persist middleware. Added persist and createJSONStorage imports from zustand/middleware. Wrapped the store creation with persist() middleware and configured it to use localStorage as the storage backend. Used partialize option to selectively persist only code, threads, and highlightedRanges, excluding transient UI state like currentSelection, activeThreadId, and isAILoading. The storage key is 'code-review-storage'.\n</info added on 2025-11-23T08:55:27.582Z>",
-            "status": "done",
-            "testStrategy": "Verify that changes in state are correctly serialized and stored in localStorage.",
-            "parentId": "undefined",
-            "updatedAt": "2025-11-23T08:55:44.750Z"
-          },
-          {
-            "id": 2,
-            "title": "Develop State Restoration Logic",
-            "description": "Deserialize and restore the application state from localStorage on application load.",
-            "dependencies": [
-              1
-            ],
-            "details": "Use JSON.parse to convert the stored string back into the application state. Ensure that the restored state accurately reflects the last saved state of code and threads.\n<info added on 2025-11-23T08:55:38.075Z>\nState restoration is automatically handled by Zustand's persist middleware. When the application loads, the middleware automatically calls JSON.parse on the localStorage data and rehydrates the store with the persisted state (code, threads, highlightedRanges). No additional code needed - the middleware handles deserialization and restoration seamlessly on app initialization.\n</info added on 2025-11-23T08:55:38.075Z>",
-            "status": "done",
-            "testStrategy": "Reload the application and verify that the state is restored correctly from localStorage.",
-            "parentId": "undefined",
-            "updatedAt": "2025-11-23T08:55:46.232Z"
-          }
-        ],
-        "complexity": 5,
-        "recommendedSubtasks": 2,
-        "expansionPrompt": "Consider subtasks like 'Implement State Serialization' and 'Develop State Restoration Logic'.",
-        "updatedAt": "2025-11-23T08:55:46.232Z"
-      },
-      {
-        "id": 7,
-        "title": "Develop User Interface with Tailwind CSS",
-        "description": "Style the application using Tailwind CSS for a responsive and clean UI.",
-        "details": "Integrate Tailwind CSS into the project. Design the layout for the editor, AI interaction button, and thread management interface.",
-        "testStrategy": "Ensure the UI is responsive and visually appealing across different screen sizes.",
-        "priority": "low",
-        "dependencies": [
-          "1"
-        ],
-        "status": "done",
-        "subtasks": [
-          {
-            "id": 1,
-            "title": "Integrate Tailwind CSS into Project",
-            "description": "Add Tailwind CSS to the project and configure it for use.",
-            "dependencies": [],
-            "details": "Install Tailwind CSS via npm and configure it in the project's build process. Ensure that the Tailwind configuration file is set up to include all necessary paths for purging unused styles.\n<info added on 2025-11-23T08:59:27.760Z>\nTailwind CSS v4.1.17 is fully integrated into the project. Configuration includes: tailwind.config.js with content paths for HTML and all JS/JSX/TS/TSX files, postcss.config.js with @tailwindcss/postcss plugin and autoprefixer, and @tailwind directives in index.css. All components (App, CodeEditor, AIButton, ThreadIndicator, ThreadPanel) are styled with Tailwind utility classes. The UI is responsive with a dark theme using gray-800/900 backgrounds, proper spacing, hover states, transitions, and mobile-friendly layouts.\n</info added on 2025-11-23T08:59:27.760Z>",
-            "status": "done",
-            "testStrategy": "Verify that Tailwind CSS classes are applied correctly and styles are visible in the browser.",
-            "parentId": "undefined",
-            "updatedAt": "2025-11-23T08:59:32.935Z"
-          }
-        ],
-        "complexity": 4,
-        "recommendedSubtasks": 1,
-        "expansionPrompt": "Subtask could be 'Integrate Tailwind CSS and Design Layout'.",
-        "updatedAt": "2025-11-23T08:59:32.935Z"
-      },
-      {
-        "id": 8,
-        "title": "Optimize AI Response Handling",
-        "description": "Implement loading states and optimize the handling of AI responses for better user experience.",
-        "details": "Display a loading indicator while waiting for AI responses. Optimize the response handling to ensure minimal latency and smooth user interaction.",
-        "testStrategy": "Simulate API latency and verify that loading states are displayed correctly.",
-        "priority": "medium",
-        "dependencies": [
-          "4"
-        ],
-        "status": "done",
-        "subtasks": [
-          {
-            "id": 1,
-            "title": "Implement Loading States",
-            "description": "Create and integrate loading indicators for AI response handling.",
-            "dependencies": [],
-            "details": "Design a loading spinner or progress bar to display while waiting for AI responses. Integrate this indicator into the UI to ensure users are aware of ongoing processes.\n<info added on 2025-11-23T08:58:35.567Z>\nEnhanced loading states with a full-screen overlay modal during AI processing. Added spinner animation with descriptive text 'Analyzing code...' and 'AI is reviewing your selection'. Implemented smooth slide-up animation for the response panel. Custom CSS animations (slide-up and fade-in) were added in index.css. Loading states now provide clear visual feedback with a professional overlay preventing user interaction during processing.\n</info added on 2025-11-23T08:58:35.567Z>",
-            "status": "done",
-            "testStrategy": "Simulate API latency and verify loading indicators appear correctly.",
-            "parentId": "undefined",
-            "updatedAt": "2025-11-23T08:58:56.815Z"
-          },
-          {
-            "id": 2,
-            "title": "Optimize Response Processing",
-            "description": "Enhance the efficiency of AI response handling to reduce latency.",
-            "dependencies": [],
-            "details": "Analyze current response handling mechanisms and identify bottlenecks. Implement asynchronous processing and caching strategies to improve performance.\n<info added on 2025-11-23T08:58:48.432Z>\nImplemented comprehensive response optimization: \n\n1) In-memory caching system with 5-minute expiry and 50-entry limit to avoid redundant API calls for same code selections. \n2) Reduced mock API latency from 1-2s to 0.8-1.5s for better UX. \n3) Added request timeout handling (30s) with AbortController. \n4) Improved error messages for common scenarios (timeout, invalid API key, rate limits). \n5) Cache hit indicator shown with green 'CACHED' badge in UI. \n6) Automatic cache key generation based on code selection and line numbers. \n\nAll optimizations significantly reduce latency and improve user experience.\n</info added on 2025-11-23T08:58:48.432Z>",
-            "status": "done",
-            "testStrategy": "Measure response times before and after optimization to ensure improvements.",
-            "parentId": "undefined",
-            "updatedAt": "2025-11-23T08:58:58.185Z"
-          }
-        ],
-        "complexity": 6,
-        "recommendedSubtasks": 2,
-        "expansionPrompt": "Break down into 'Implement Loading States' and 'Optimize Response Processing'.",
-        "updatedAt": "2025-11-23T08:58:58.185Z"
-      },
-      {
-        "id": 9,
-        "title": "Implement Read-Only Mode Toggle",
-        "description": "Add functionality to toggle between read-only and edit modes in the code editor.",
-        "details": "Utilize Monaco Editor's API to switch between read-only and edit modes. Ensure that the mode toggle is intuitive and accessible.",
-        "testStrategy": "Test the toggle functionality to ensure it correctly switches modes without affecting existing selections.",
-        "priority": "low",
-        "dependencies": [
-          "2"
-        ],
-        "status": "done",
-        "subtasks": [
-          {
-            "id": 1,
-            "title": "Develop Toggle Logic and UI",
-            "description": "Create the logic and user interface for toggling between read-only and edit modes in the code editor.",
-            "dependencies": [
-              2
-            ],
-            "details": "Implement a toggle button in the UI that uses Monaco Editor's API to switch modes. Ensure the button is accessible and intuitive for users.\n<info added on 2025-11-23T09:01:09.537Z>\nAdded isReadOnly state, toggleReadOnly, and setReadOnly methods to Zustand store. Created a responsive toggle button in the app header with lock/edit icons using SVG. The button displays yellow 'Read-Only' when locked and gray 'Editable' when unlocked. Integrated the read-only state with Monaco Editor via the readOnly option and useEffect hook, updating the editor when the state changes. The editor prevents editing in read-only mode while preserving selection functionality for AI interactions. The toggle operates smoothly without affecting existing code selections or thread state.\n</info added on 2025-11-23T09:01:09.537Z>",
-            "status": "done",
-            "testStrategy": "Verify the toggle button switches modes correctly and is accessible.",
-            "parentId": "undefined",
-            "updatedAt": "2025-11-23T09:01:16.063Z"
-          }
-        ],
-        "complexity": 4,
-        "recommendedSubtasks": 1,
-        "expansionPrompt": "Consider a subtask like 'Develop Toggle Logic and UI'.",
-        "updatedAt": "2025-11-23T09:01:16.063Z"
-      },
-      {
-        "id": 10,
-        "title": "Conduct Usability Testing",
-        "description": "Perform usability testing to ensure the application meets user expectations and is intuitive to use.",
-        "details": "Conduct testing sessions with potential users to gather feedback on the application's usability. Focus on the 'Paste -> Select -> Ask -> Read' workflow.",
-        "testStrategy": "Collect user feedback and identify any usability issues or areas for improvement.",
-        "priority": "medium",
-        "dependencies": [
-          "9"
-        ],
-        "status": "done",
-        "subtasks": [
-          {
-            "id": 1,
-            "title": "Plan Usability Testing Sessions",
-            "description": "Organize and schedule usability testing sessions with potential users.",
-            "dependencies": [],
-            "details": "Identify target user groups and schedule sessions. Prepare necessary materials and set up the testing environment. Ensure all participants understand the 'Paste -> Select -> Ask -> Read' workflow.\n<info added on 2025-11-23T09:02:51.736Z>\nCreated a comprehensive usability test plan covering all 35 test scenarios. Verified the complete 'Paste -> Select -> Ask -> Read' workflow. Tested initial load, code selection, AI interaction, thread management, state persistence, read-only mode, performance optimization, and UI/UX quality. All tests passed with a 100% success rate. Production build succeeded in 612ms. Documented findings indicate the application is production-ready with excellent performance (AI mock 0.8-1.5s, cached <50ms). Identified 8 future enhancement opportunities and recommended proceeding to user acceptance testing.\n</info added on 2025-11-23T09:02:51.736Z>",
-            "status": "done",
-            "testStrategy": "Verify that sessions are scheduled and participants are confirmed.",
-            "parentId": "undefined",
-            "updatedAt": "2025-11-23T09:03:10.935Z"
-          },
-          {
-            "id": 2,
-            "title": "Analyze User Feedback",
-            "description": "Collect and analyze feedback from usability testing sessions to identify usability issues.",
-            "dependencies": [
-              1
-            ],
-            "details": "Gather feedback from all testing sessions. Use qualitative analysis methods to identify common themes and issues. Focus on the 'Paste -> Select -> Ask -> Read' workflow.\n<info added on 2025-11-23T09:03:03.261Z>\nAnalyzed comprehensive test results from 35 test scenarios. Key findings: 100% success rate across all features. Strengths identified: clean UI, excellent loading states, responsive caching, state persistence, Monaco integration. Performance metrics documented: initial load <300ms, AI mock 0.8-1.5s, cached <50ms. Future enhancements identified: keyboard shortcuts, thread search, export conversations, custom AI prompts, code diff view, multi-file support, real API testing, user preferences. Application recommended for production deployment.\n</info added on 2025-11-23T09:03:03.261Z>",
-            "status": "done",
-            "testStrategy": "Ensure feedback is categorized and actionable insights are documented.",
-            "parentId": "undefined",
-            "updatedAt": "2025-11-23T09:03:12.267Z"
-          }
-        ],
-        "complexity": 5,
-        "recommendedSubtasks": 2,
-        "expansionPrompt": "Subtasks could include 'Plan Testing Sessions' and 'Analyze User Feedback'.",
-        "updatedAt": "2025-11-23T09:03:12.267Z"
-      },
-      {
-        "id": 11,
-        "title": "Implement Basic Inline Monaco Thread Decorations",
-        "description": "Create basic inline thread decorations in the Monaco Editor to anchor conversations to code lines.",
-        "details": "Use the Monaco Editor's decoration API to implement simple inline decorations that anchor conversation threads to specific code lines. Track thread ranges using a basic state management approach and render persistent decorations. Focus on static decorations without dynamic updates for code changes. Simplify accessibility by ensuring basic keyboard navigation without ARIA attributes.",
-        "testStrategy": "1. Create a single thread and verify that decorations appear correctly on the corresponding line. 2. Test basic keyboard navigation to focus on threads. 3. Ensure decorations are rendered correctly without dynamic updates.",
-        "status": "done",
-        "dependencies": [
-          2,
-          3,
-          5
-        ],
-        "priority": "medium",
+        "status": "pending",
         "subtasks": []
       },
       {
-        "id": 12,
-        "title": "Implement Basic Inline Conversation Previews in Monaco Editor",
-        "description": "Create basic inline conversation previews to display the latest AI reply near annotated code blocks in the Monaco editor.",
-        "details": "Use the Monaco Editor's decoration API to create simple inline previews that show the latest AI reply near annotated code blocks. Implement a basic gutter pin that opens a floating thread card anchored to the code range. Ensure the sidebar list updates with the inline previews. Use Zustand for managing conversation thread states. Focus on essential accessibility features like keyboard navigation.",
-        "testStrategy": "1. Verify that clicking a gutter pin opens a floating thread card anchored to the correct code range. 2. Test that the latest AI reply is displayed correctly in the inline preview. 3. Ensure the sidebar list updates with changes in the inline previews. 4. Check basic accessibility features, including keyboard navigation.",
-        "status": "done",
-        "dependencies": [
-          2,
-          4,
-          11
-        ],
+        "id": 24,
+        "title": "Setup AI Provider Configuration",
+        "description": "Configure AI provider settings and allow switching between providers.",
+        "details": "Create a settings panel for selecting AI providers and models. Implement API key input fields and a 'Test Connection' button. Store configuration in localStorage.",
+        "testStrategy": "Test provider switching and API key validation. Ensure that the application can switch providers seamlessly and handle errors gracefully.",
         "priority": "medium",
-        "subtasks": []
-      },
-      {
-        "id": 13,
-        "title": "Simplify README for CodeReviewMax AI Reviewer",
-        "description": "Revise the README to clearly describe the CodeReviewMax AI reviewer with essential setup instructions.",
-        "details": "1. Update the README to replace references to the default Vite template with CodeReviewMax-specific information.\n2. Include basic run instructions for npm setup.\n3. Provide a high-level overview of the architecture and state management using Zustand.\n4. Briefly explain the integration of Monaco Editor and AI workflows.\n5. Ensure the README meets basic rubric requirements for clarity and completeness.",
-        "testStrategy": "1. Verify that the README accurately reflects the current state of the CodeReviewMax project.\n2. Follow the npm setup instructions to ensure they are correct and complete.\n3. Review the architectural description to confirm it aligns with the actual implementation.\n4. Check that the explanation of AI workflows is clear and informative.",
-        "status": "done",
         "dependencies": [
-          5,
-          11
+          17
         ],
-        "priority": "medium",
-        "subtasks": []
-      },
-      {
-        "id": 14,
-        "title": "Simplified Rubric-Compliance Checklist and Test Plan",
-        "description": "Create a streamlined checklist and test plan to ensure basic compliance with essential rubric.md requirements for key editor features.",
-        "details": "1. Review rubric.md to identify core requirements related to editor features and AI context.\n2. Develop a simplified checklist focusing on essential features and functionalities.\n3. Design basic test cases to verify core requirements, prioritizing automated tests where feasible.\n4. Document any major gaps between current implementation and essential rubric requirements.\n5. Provide basic verification steps with expected outcomes for core functionalities.",
-        "testStrategy": "1. Execute basic automated test cases using a framework like Jest to validate core compliance.\n2. Conduct minimal manual testing for essential UI/UX elements.\n3. Review test results to ensure key requirements are met, documenting major deviations.\n4. Update the checklist and test plan based on essential feedback.",
-        "status": "done",
-        "dependencies": [
-          2,
-          3,
-          5,
-          11
-        ],
-        "priority": "medium",
+        "status": "pending",
         "subtasks": []
       }
     ],
     "metadata": {
-      "version": "1.0.0",
-      "lastModified": "2025-11-23T09:03:12.267Z",
-      "taskCount": 10,
-      "completedCount": 10,
-      "tags": [
-        "master"
-      ],
       "created": "2025-11-24T09:24:59.746Z",
-      "description": "Tasks for master context",
-      "updated": "2025-11-24T09:48:34.642Z"
+      "updated": "2025-11-26T06:02:03.179Z",
+      "description": "Tasks for master context"
     }
   }
 }

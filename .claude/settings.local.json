@@ -8,7 +8,14 @@
       "Bash(source .env)",
       "Bash(export:*)",
       "Bash(npx:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Skill(frontend-design)",
+      "Bash(task-master parse-prd:*)",
+      "Bash(task-master analyze-complexity:*)",
+      "Bash(task-master complexity-report:*)",
+      "Bash(task-master expand:*)",
+      "Bash(task-master list:*)",
+      "Bash(task-master show:*)"
     ],
     "deny": [],
     "ask": []

@@ -5,9 +5,20 @@ import { queryAI, formatAIResponse } from '../services/aiService';
 const AIButton = ({ code }) => {
   const { currentSelection, isAILoading, setAILoading, addThread, addMessageToThread } = useEditorStore();
   const [showQuestionDialog, setShowQuestionDialog] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [question, setQuestion] = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const toastTimer = useRef(null);
+  const modalRef = useRef(null);
+
+  const closeDialog = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setShowQuestionDialog(false);
+      setIsClosing(false);
+      setQuestion('');
+    }, 200);
+  };
 
   useEffect(() => {
     return () => {
@@ -41,6 +52,7 @@ const AIButton = ({ code }) => {
     }
 
     setShowQuestionDialog(false);
+    setIsClosing(false);
     setAILoading(true);
 
     try {
@@ -104,62 +116,70 @@ const AIButton = ({ code }) => {
       </button>
 
       {showQuestionDialog && (
-        <div data-preserve-selection="true" className="modal-backdrop flex items-center justify-center p-4 z-[9999]">
+        <div
+          data-preserve-selection="true"
+          className="modal-backdrop flex items-center justify-center p-4 z-[9999]"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              closeDialog();
+            }
+          }}
+          style={{
+            animation: isClosing ? 'fadeOut 0.2s ease-out forwards' : 'fadeIn 0.2s ease-out'
+          }}
+        >
           <div
+            ref={modalRef}
             data-preserve-selection="true"
-            className="w-full max-w-3xl rounded-2xl border overflow-hidden animate-scale-in"
+            className="w-full rounded-xl border overflow-hidden"
             style={{
-              borderColor: 'var(--accent)',
+              maxWidth: '520px',
+              borderColor: 'var(--border-color)',
               backgroundColor: 'var(--surface)',
-              boxShadow: '0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(99, 102, 241, 0.2)'
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+              animation: isClosing
+                ? 'slideDown 0.2s cubic-bezier(0.4, 0, 1, 1) forwards'
+                : 'slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
             }}
           >
             {/* Header */}
             <div
-              className="px-6 py-5 border-b flex items-center justify-between backdrop-blur-sm"
-              style={{
-                borderColor: 'var(--border-color)',
-                background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%)'
-              }}
+              className="px-4 py-3 border-b flex items-center justify-between"
+              style={{ borderColor: 'var(--border-color)' }}
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center"
-                     style={{
-                       background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%)'
-                     }}>
-                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-md flex items-center justify-center"
+                     style={{ backgroundColor: 'var(--accent)' }}>
+                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold" style={{ color: 'var(--foreground)' }}>Ask AI</h3>
+                  <h3 className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>Ask AI</h3>
                   <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
                     Lines {currentSelection?.startLineNumber}–{currentSelection?.endLineNumber}
                   </p>
                 </div>
               </div>
               <button
-                onClick={() => {
-                  setShowQuestionDialog(false);
-                  setQuestion('');
-                }}
-                className="p-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-[var(--surface-muted)]"
+                onClick={closeDialog}
+                className="p-1.5 rounded-md text-sm transition-colors hover:bg-[var(--surface-muted)]"
                 style={{ color: 'var(--text-muted)' }}
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
             {/* Body */}
-            <div className="p-6 space-y-5">
+            <div className="p-4 space-y-3">
               {/* Code Preview */}
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider mb-2 block"
+                <label className="text-xs font-medium mb-1.5 block"
                        style={{ color: 'var(--text-muted)' }}>
                   Selected Code
                 </label>
                 <pre
-                  className="rounded-xl p-4 text-sm font-mono max-h-48 overflow-auto"
+                  className="rounded-lg p-3 text-xs font-mono max-h-32 overflow-auto"
                   style={{
                     backgroundColor: '#0a0a0a',
                     border: '1px solid var(--border-color)',
@@ -172,7 +192,7 @@ const AIButton = ({ code }) => {
 
               {/* Question Input */}
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider mb-2 block"
+                <label className="text-xs font-medium mb-1.5 block"
                        style={{ color: 'var(--text-muted)' }}>
                   Your Question
                 </label>
@@ -183,28 +203,27 @@ const AIButton = ({ code }) => {
                     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
                       handleSubmitQuestion();
                     }
+                    if (e.key === 'Escape') {
+                      closeDialog();
+                    }
                   }}
-                  placeholder="What would you like to know about this code?"
+                  placeholder="What would you like to know?"
                   className="w-full input-textarea text-sm resize-none"
-                  style={{ minHeight: '120px' }}
+                  style={{ minHeight: '80px' }}
                   autoFocus
                 />
-                <p className="text-xs mt-2 flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
-                  <kbd className="px-2 py-0.5 rounded text-xs font-mono" style={{ backgroundColor: 'var(--surface-muted)', border: '1px solid var(--border-color)' }}>⌘</kbd>
+                <p className="text-xs mt-1.5 flex items-center gap-1.5" style={{ color: 'var(--text-muted)' }}>
+                  <kbd className="px-1.5 py-0.5 rounded text-xs font-mono" style={{ backgroundColor: 'var(--surface-muted)', border: '1px solid var(--border-color)' }}>⌘</kbd>
                   <span>+</span>
-                  <kbd className="px-2 py-0.5 rounded text-xs font-mono" style={{ backgroundColor: 'var(--surface-muted)', border: '1px solid var(--border-color)' }}>Enter</kbd>
-                  <span>to submit</span>
+                  <kbd className="px-1.5 py-0.5 rounded text-xs font-mono" style={{ backgroundColor: 'var(--surface-muted)', border: '1px solid var(--border-color)' }}>Enter</kbd>
                 </p>
               </div>
 
               {/* Actions */}
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex justify-end gap-2 pt-1">
                 <button
-                  onClick={() => {
-                    setShowQuestionDialog(false);
-                    setQuestion('');
-                  }}
-                  className="px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200"
+                  onClick={closeDialog}
+                  className="px-3 py-2 rounded-md text-sm font-medium transition-colors"
                   style={{
                     backgroundColor: 'var(--surface-muted)',
                     color: 'var(--text-secondary)',
@@ -215,18 +234,13 @@ const AIButton = ({ code }) => {
                 </button>
                 <button
                   onClick={handleSubmitQuestion}
-                  className="px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 relative overflow-hidden group"
+                  className="px-4 py-2 rounded-md text-sm font-semibold transition-colors"
                   style={{
                     backgroundColor: 'var(--accent)',
-                    color: 'white',
-                    boxShadow: '0 4px 20px rgba(99, 102, 241, 0.3)'
+                    color: 'white'
                   }}
                 >
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                       style={{
-                         background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%)'
-                       }}></div>
-                  <span className="relative">Ask AI</span>
+                  Ask AI
                 </button>
               </div>
             </div>
