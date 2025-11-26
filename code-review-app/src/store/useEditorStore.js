@@ -36,6 +36,17 @@ const useEditorStore = create(
   code: '',
   setCode: (code) => set({ code }),
 
+  // File upload state
+  currentFileName: null,
+  currentLanguage: 'javascript',
+  setCurrentFileName: (fileName) => set({ currentFileName: fileName }),
+  setCurrentLanguage: (language) => set({ currentLanguage: language }),
+  setFileWithLanguage: (code, fileName, language) => set({
+    code,
+    currentFileName: fileName,
+    currentLanguage: language,
+  }),
+
   // Thread state - manages conversation threads anchored to code lines
   threads: [],
 
@@ -109,15 +120,48 @@ const useEditorStore = create(
   // Active thread selection
   activeThreadId: null,
   setActiveThread: (threadId) => set({ activeThreadId: threadId }),
+  clearActiveThread: () => set({ activeThreadId: null }),
 
   // UI state
   isAILoading: false,
   setAILoading: (loading) => set({ isAILoading: loading }),
 
+  // Streaming state
+  streamingText: '',
+  streamingThreadId: null,
+  setStreamingText: (text) => set({ streamingText: text }),
+  setStreamingThreadId: (threadId) => set({ streamingThreadId: threadId }),
+  clearStreaming: () => set({ streamingText: '', streamingThreadId: null }),
+
   // Editor mode state
   isReadOnly: false,
   toggleReadOnly: () => set((state) => ({ isReadOnly: !state.isReadOnly })),
   setReadOnly: (readOnly) => set({ isReadOnly: readOnly }),
+
+  // AI Settings
+  aiSettings: {
+    provider: 'mock', // 'mock', 'openai', 'anthropic'
+    model: 'gpt-4o-mini',
+    apiKeys: {
+      openai: '',
+      anthropic: '',
+    },
+  },
+  setAIProvider: (provider) => set((state) => ({
+    aiSettings: { ...state.aiSettings, provider }
+  })),
+  setAIModel: (model) => set((state) => ({
+    aiSettings: { ...state.aiSettings, model }
+  })),
+  setAPIKey: (provider, key) => set((state) => ({
+    aiSettings: {
+      ...state.aiSettings,
+      apiKeys: { ...state.aiSettings.apiKeys, [provider]: key }
+    }
+  })),
+  updateAISettings: (settings) => set((state) => ({
+    aiSettings: { ...state.aiSettings, ...settings }
+  })),
 }),
     {
       name: 'code-review-storage',
@@ -127,6 +171,9 @@ const useEditorStore = create(
         threads: state.threads,
         highlightedRanges: state.highlightedRanges,
         activeThreadId: state.activeThreadId,
+        aiSettings: state.aiSettings,
+        currentFileName: state.currentFileName,
+        currentLanguage: state.currentLanguage,
       }),
     }
   )

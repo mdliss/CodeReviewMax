@@ -1,15 +1,34 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import useEditorStore from '../store/useEditorStore';
-import { queryAI, formatAIResponse } from '../services/aiService';
+import { queryAIStreaming, formatAIResponse } from '../services/aiService';
 
-const AIButton = ({ code }) => {
-  const { currentSelection, isAILoading, setAILoading, addThread, addMessageToThread } = useEditorStore();
+const AIButton = forwardRef(({ code }, ref) => {
+  const {
+    currentSelection,
+    isAILoading,
+    setAILoading,
+    addThread,
+    addMessageToThread,
+    aiSettings,
+    setStreamingText,
+    setStreamingThreadId,
+    clearStreaming
+  } = useEditorStore();
   const [showQuestionDialog, setShowQuestionDialog] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [question, setQuestion] = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const toastTimer = useRef(null);
   const modalRef = useRef(null);
+
+  // Expose openDialog method to parent via ref
+  useImperativeHandle(ref, () => ({
+    openDialog: () => {
+      if (currentSelection && !currentSelection.isEmpty && !isAILoading) {
+        setShowQuestionDialog(true);
+      }
+    }
+  }), [currentSelection, isAILoading]);
 
   const closeDialog = () => {
     setIsClosing(true);
@@ -72,7 +91,22 @@ const AIButton = ({ code }) => {
 
       const newThread = addThread(threadData);
 
-      const response = await queryAI(currentSelection, code, question);
+      // Set up streaming state
+      if (newThread?.id) {
+        setStreamingThreadId(newThread.id);
+        setStreamingText('');
+      }
+
+      const response = await queryAIStreaming(
+        currentSelection,
+        code,
+        question,
+        aiSettings,
+        [],
+        (chunk, fullText) => {
+          setStreamingText(fullText);
+        }
+      );
       const formatted = formatAIResponse(response);
 
       if (newThread?.id) {
@@ -88,6 +122,7 @@ const AIButton = ({ code }) => {
       showToast(`Error: ${error.message}`);
     } finally {
       setAILoading(false);
+      clearStreaming();
     }
   };
 
@@ -266,6 +301,8 @@ const AIButton = ({ code }) => {
       )}
     </>
   );
-};
+});
+
+AIButton.displayName = 'AIButton';
 
 export default AIButton;
