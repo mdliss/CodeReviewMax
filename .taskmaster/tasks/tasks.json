@@ -51,9 +51,10 @@
             "description": "Develop a function to package code, context, and prompts for API requests.",
             "dependencies": [],
             "details": "Create a function that collects selected code, its surrounding context, and user prompts. Use OpenAI SDK or a mock service to format and send requests.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Mock API responses to ensure correct packaging and sending of requests.",
-            "parentId": "undefined"
+            "parentId": "undefined",
+            "updatedAt": "2025-11-26T20:57:52.165Z"
           },
           {
             "id": 2,
@@ -63,9 +64,10 @@
               1
             ],
             "details": "Design and implement a floating 'Ask AI' button. Ensure it is accessible and triggers the API interaction function when clicked.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify button visibility and functionality, ensuring it triggers the API call.",
-            "parentId": "undefined"
+            "parentId": "undefined",
+            "updatedAt": "2025-11-26T20:57:53.549Z"
           },
           {
             "id": 3,
@@ -75,15 +77,16 @@
               1
             ],
             "details": "Implement a handler for API responses to parse and display suggestions. Ensure error handling and loading states are managed.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with mock responses to ensure correct parsing and display of AI suggestions.",
-            "parentId": "undefined"
+            "parentId": "undefined",
+            "updatedAt": "2025-11-26T20:57:54.941Z"
           }
         ],
         "complexity": 7,
         "recommendedSubtasks": 3,
         "expansionPrompt": "Break down into subtasks for setting up API interactions, implementing the UI button, and handling API responses.",
-        "updatedAt": "2025-11-26T06:28:29.926Z"
+        "updatedAt": "2025-11-26T20:57:54.941Z"
       },
       {
         "id": "18",
@@ -103,9 +106,10 @@
             "description": "Initialize Zustand to manage global state for conversation threads.",
             "dependencies": [],
             "details": "Install Zustand and create a store to manage thread states. Define actions for adding, updating, and removing threads.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify state updates correctly when threads are added or removed.",
-            "parentId": "undefined"
+            "parentId": "undefined",
+            "updatedAt": "2025-11-26T20:57:56.300Z"
           },
           {
             "id": 2,
@@ -115,9 +119,10 @@
               1
             ],
             "details": "Design a schema to represent threads, including properties for line range, messages, and metadata. Integrate with Zustand store.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test data model by creating sample threads and checking data integrity.",
-            "parentId": "undefined"
+            "parentId": "undefined",
+            "updatedAt": "2025-11-26T20:57:57.593Z"
           },
           {
             "id": 3,
@@ -127,9 +132,10 @@
               2
             ],
             "details": "Use React to create visual indicators for threads. Ensure indicators are positioned correctly based on line ranges.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Check that indicators appear at correct lines and respond to user interactions.",
-            "parentId": "undefined"
+            "parentId": "undefined",
+            "updatedAt": "2025-11-26T20:57:58.982Z"
           },
           {
             "id": 4,
@@ -141,15 +147,16 @@
               3
             ],
             "details": "Create test cases for adding, updating, and removing threads. Verify UI updates and state consistency.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use automated tests to simulate user actions and validate system behavior.",
-            "parentId": "undefined"
+            "parentId": "undefined",
+            "updatedAt": "2025-11-26T20:58:00.592Z"
           }
         ],
         "complexity": 8,
         "recommendedSubtasks": 4,
         "expansionPrompt": "Consider subtasks for state management setup, data model implementation, UI integration, and testing.",
-        "updatedAt": "2025-11-26T06:28:34.832Z"
+        "updatedAt": "2025-11-26T20:58:00.592Z"
       },
       {
         "id": "19",
@@ -220,9 +227,10 @@
             "description": "Develop a right-click context menu with options like 'Ask AI about this'.",
             "dependencies": [],
             "details": "Create a context menu that appears on right-click, integrating options such as 'Ask AI about this'. Ensure compatibility with Monaco Editor's existing context menu.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify the context menu appears on right-click and options are selectable.",
-            "parentId": "undefined"
+            "parentId": "undefined",
+            "updatedAt": "2025-11-26T20:58:02.060Z"
           },
           {
             "id": 2,
@@ -230,9 +238,10 @@
             "description": "Implement smart selection features to expand selection to logical boundaries.",
             "dependencies": [],
             "details": "Use Monaco's default selection behaviors to enhance selection logic. Implement functionality to expand selection to logical code boundaries, such as functions or blocks.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test selection expansion to ensure it correctly identifies and selects logical code boundaries.",
-            "parentId": "undefined"
+            "parentId": "undefined",
+            "updatedAt": "2025-11-26T20:58:03.393Z"
           },
           {
             "id": 3,
@@ -243,15 +252,16 @@
               2
             ],
             "details": "Perform comprehensive testing to ensure the context menu functions correctly and smart selection logic works as intended. Include edge cases and compatibility checks with Monaco Editor.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test both features in various scenarios to ensure reliability and accuracy.",
-            "parentId": "undefined"
+            "parentId": "undefined",
+            "updatedAt": "2025-11-26T20:58:04.740Z"
           }
         ],
         "complexity": 7,
         "recommendedSubtasks": 3,
         "expansionPrompt": "Break down into subtasks for context menu implementation, smart selection logic, and testing.",
-        "updatedAt": "2025-11-26T06:33:27.217Z"
+        "updatedAt": "2025-11-26T20:58:04.740Z"
       },
       {
         "id": "23",
@@ -353,7 +363,7 @@
     ],
     "metadata": {
       "version": "1.0.0",
-      "lastModified": "2025-11-26T08:39:39.980Z",
+      "lastModified": "2025-11-26T20:58:04.741Z",
       "taskCount": 14,
       "completedCount": 14,
       "tags": [
