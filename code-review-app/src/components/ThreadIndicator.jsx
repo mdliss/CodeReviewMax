@@ -79,24 +79,13 @@ const ThreadConversation = ({ thread }) => {
   const prevMessageCount = useRef(thread.messages.length);
 
   useEffect(() => {
-    if (messagesEndRef.current) {
-      if (!hasMounted.current) {
-        // On initial mount, or when switching threads, scroll to bottom without smooth behavior
-        messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
-        hasMounted.current = true;
-      } else if (thread.messages.length > prevMessageCount.current) {
-        // Only scroll smoothly if new messages have been added
-        messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-      }
-      prevMessageCount.current = thread.messages.length;
+    // Only scroll when NEW messages are added (not on initial open)
+    if (messagesEndRef.current && hasMounted.current && thread.messages.length > prevMessageCount.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-  }, [thread.messages, thread.id]); // Add thread.id to dependencies to reset prevMessageCount on thread switch
-
-  useEffect(() => {
-    // Reset hasMounted and prevMessageCount when a new thread becomes active
-    hasMounted.current = false;
-    prevMessageCount.current = 0;
-  }, [thread.id]);
+    prevMessageCount.current = thread.messages.length;
+    hasMounted.current = true;
+  }, [thread.messages.length]);
 
   const handleSendReply = async () => {
     if (!replyText.trim()) return;
@@ -159,11 +148,11 @@ const ThreadConversation = ({ thread }) => {
 
   return (
     <div
-      className="border-t flex flex-col shrink-0 animate-slide-in-down"
+      className="flex flex-col rounded-xl border"
       style={{
-        borderColor: 'var(--border-color)',
         backgroundColor: 'var(--surface)',
-        maxHeight: '50vh',
+        borderColor: 'var(--border-color)',
+        maxHeight: '400px',
       }}
     >
               <div
@@ -340,7 +329,8 @@ const ThreadIndicator = ({ thread, onClick, style }) => {
 
   return (
     <div
-      className="group relative cursor-pointer rounded-xl border transition-all duration-300 overflow-hidden animate-fade-in"
+      className="thread-item group relative cursor-pointer rounded-xl border overflow-hidden"
+      data-thread-id={thread.id}
       style={{
         borderColor: isActive ? 'var(--accent)' : 'var(--border-color)',
         backgroundColor: isActive ? 'var(--surface-muted)' : 'var(--card-bg)',
@@ -372,24 +362,15 @@ const ThreadIndicator = ({ thread, onClick, style }) => {
 
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded"
-                    style={{
-                      backgroundColor: 'var(--accent-light)',
-                      color: 'var(--accent)'
-                    }}>
-                L{thread.startLine}–{thread.endLine}
-              </span>
-              <span className="text-xs px-1.5 py-0.5 rounded-full font-medium"
-                    style={{
-                      backgroundColor: isActive ? 'rgba(99, 102, 241, 0.2)' : 'var(--surface-muted)',
-                      color: isActive ? 'var(--accent)' : 'var(--text-muted)'
-                    }}>
-                {messageCount}
-              </span>
-            </div>
+            <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded inline-block mb-1.5"
+                  style={{
+                    backgroundColor: 'var(--accent-light)',
+                    color: 'var(--accent)'
+                  }}>
+              L{thread.startLine}–{thread.endLine}
+            </span>
 
-            <p className="text-xs font-medium mb-1 line-clamp-1 font-mono"
+            <p className="text-xs font-medium mb-1 line-clamp-2"
                style={{ color: 'var(--foreground)' }}
                title={thread.selectedCode}>
               {thread.selectedCode}
@@ -411,13 +392,15 @@ const ThreadIndicator = ({ thread, onClick, style }) => {
               e.stopPropagation();
               setShowMenu(!showMenu);
             }}
-            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1 rounded-lg hover:bg-[var(--border-color)]"
-            style={{ color: 'var(--text-muted)' }}
+            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1.5 rounded-md"
+            style={{
+              color: 'var(--text-muted)',
+              backgroundColor: showMenu ? 'var(--surface-muted)' : 'transparent'
+            }}
+            title="More options"
           >
-            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 16 16">
-              <circle cx="8" cy="2" r="1.5"/>
-              <circle cx="8" cy="8" r="1.5"/>
-              <circle cx="8" cy="14" r="1.5"/>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
             </svg>
           </button>
         </div>
@@ -426,29 +409,36 @@ const ThreadIndicator = ({ thread, onClick, style }) => {
       {/* Thread menu */}
       {showMenu && (
         <div
-          className="dropdown-container min-w-[160px] right-2 top-14 z-50"
-          style={{ backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)' }}
+          className="absolute right-2 top-12 z-50 py-1 rounded-lg shadow-xl min-w-[160px]"
+          style={{
+            backgroundColor: 'var(--surface)',
+            border: '1px solid var(--border-color)',
+            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)'
+          }}
         >
           <button
             onClick={handleExport}
-            className="block w-full text-left px-4 py-2.5 text-sm font-medium transition-all duration-200 rounded flex items-center gap-2"
+            className="w-full text-left px-3 py-2 text-xs font-medium transition-colors flex items-center gap-2"
             style={{ color: 'var(--text-secondary)' }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--surface-muted)'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--surface-muted)'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-            Export as Markdown
+            <span>Export</span>
           </button>
           <button
             onClick={handleDelete}
-            className="block w-full text-left px-4 py-2.5 text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-200 rounded flex items-center gap-2"
+            className="w-full text-left px-3 py-2 text-xs font-medium transition-colors flex items-center gap-2"
+            style={{ color: '#f87171' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
-            Delete Thread
+            <span>Delete</span>
           </button>
         </div>
       )}
@@ -458,78 +448,67 @@ const ThreadIndicator = ({ thread, onClick, style }) => {
 
 const ThreadPanel = () => {
   const { threads, activeThreadId, setActiveThread } = useEditorStore();
+  const threadListRef = useRef(null);
+  const scrollPositionRef = useRef(0);
 
   // Safety check for threads
   const safeThreads = Array.isArray(threads) ? threads : [];
   const activeThread = safeThreads.find((t) => t?.id === activeThreadId);
 
-  console.log('🔄 ThreadPanel rendering - threads:', safeThreads.length, 'activeId:', activeThreadId);
+  const handleThreadClick = (thread) => {
+    setActiveThread(thread.id);
+  };
 
   return (
     <div
-      className="h-full flex flex-col rounded-2xl border overflow-hidden"
+      className="h-full rounded-2xl border overflow-y-auto"
       style={{
         borderColor: 'var(--border-color)',
         backgroundColor: 'var(--surface)'
       }}
     >
-      {/* Always show thread list at top */}
-      <div
-        className="flex flex-col border-b"
-        style={{
-          borderColor: 'var(--border-color)',
-          maxHeight: activeThread ? '40%' : '100%',
-          minHeight: activeThread ? '200px' : 'auto'
-        }}
-      >
-        <div className="px-4 py-3 border-b" style={{ backgroundColor: 'var(--surface-muted)', borderColor: 'var(--border-color)' }}>
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-bold" style={{ color: 'var(--foreground)' }}>
-                All Conversations
-              </h3>
-              <p className="text-[10px] mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                {safeThreads.length} total • Click to view
-              </p>
-            </div>
-            <span className="text-sm font-bold px-3 py-1.5 rounded-lg" style={{ backgroundColor: 'var(--accent)', color: 'white' }}>
-              {safeThreads.length}
-            </span>
-          </div>
-        </div>
-        <div className="flex-1 overflow-y-auto px-3 py-2 space-y-2" style={{ backgroundColor: 'var(--background)' }}>
-          {safeThreads.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
-              <div className="w-12 h-12 rounded-full mb-3 flex items-center justify-center"
-                   style={{ backgroundColor: 'var(--surface-muted)', border: '2px dashed var(--border-color)' }}>
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: 'var(--text-muted)' }}>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </div>
-              <p className="text-xs font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>No conversations yet</p>
-              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                Select code and ask AI to start
-              </p>
-            </div>
-          ) : (
-            safeThreads.map((thread, index) => (
-              <ThreadIndicator
-                key={thread.id}
-                thread={thread}
-                onClick={(t) => setActiveThread(t.id)}
-                style={{ animationDelay: `${index * 50}ms` }}
-              />
-            ))
-          )}
-        </div>
+      {/* Header */}
+      <div className="px-4 py-3 border-b sticky top-0 z-10" style={{ backgroundColor: 'var(--surface-muted)', borderColor: 'var(--border-color)' }}>
+        <h3 className="text-sm font-bold" style={{ color: 'var(--foreground)' }}>
+          All Conversations
+        </h3>
+        <p className="text-[10px] mt-0.5" style={{ color: 'var(--text-muted)' }}>
+          Click to view
+        </p>
       </div>
 
-      {/* Active Conversation - shows below thread list */}
-      {activeThread && (
-        <div className="flex-1 min-h-0">
-          <ThreadConversation key={activeThread.id} thread={activeThread} />
-        </div>
-      )}
+      {/* Thread list and conversations in one scrollable container */}
+      <div className="px-3 py-2 space-y-2" style={{ backgroundColor: 'var(--background)' }}>
+        {safeThreads.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
+            <div className="w-12 h-12 rounded-full mb-3 flex items-center justify-center"
+                 style={{ backgroundColor: 'var(--surface-muted)', border: '2px dashed var(--border-color)' }}>
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: 'var(--text-muted)' }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </div>
+            <p className="text-xs font-semibold mb-1" style={{ color: 'var(--text-secondary)' }}>No conversations yet</p>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+              Select code and ask AI to start
+            </p>
+          </div>
+        ) : (
+          safeThreads.map((thread) => (
+            <div key={thread.id}>
+              <ThreadIndicator
+                thread={thread}
+                onClick={handleThreadClick}
+              />
+              {/* Conversation appears directly below the clicked thread */}
+              {activeThreadId === thread.id && (
+                <div className="mt-2">
+                  <ThreadConversation thread={thread} />
+                </div>
+              )}
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };

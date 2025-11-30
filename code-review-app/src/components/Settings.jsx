@@ -102,12 +102,12 @@ const Settings = ({ isOpen, onClose }) => {
             <label className="text-xs font-medium mb-2 block" style={{ color: 'var(--text-muted)' }}>
               AI Provider
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="flex gap-2">
               {Object.entries(AI_PROVIDERS).map(([key, provider]) => (
                 <button
                   key={key}
                   onClick={() => handleProviderChange(key)}
-                  className="p-3 rounded-lg border text-sm font-medium transition-all"
+                  className="flex-1 py-2.5 px-3 rounded-lg border text-xs font-medium transition-all text-center whitespace-nowrap"
                   style={{
                     borderColor: aiSettings.provider === key ? 'var(--accent)' : 'var(--border-color)',
                     backgroundColor: aiSettings.provider === key ? 'var(--accent-light)' : 'transparent',
@@ -262,39 +262,33 @@ const Settings = ({ isOpen, onClose }) => {
             </div>
           )}
 
-          {/* Security Warning */}
-          {aiSettings.provider !== 'mock' && (
-            <div
-              className="px-3 py-2 rounded-lg flex items-center gap-2"
-              style={{ backgroundColor: 'rgba(251, 191, 36, 0.08)' }}
-            >
-              <svg className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#fbbf24' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <p className="text-[11px]" style={{ color: '#d97706' }}>
-                Keys stored in browser only
-              </p>
-            </div>
-          )}
 
-          {/* Test Connection Result - inline style */}
+          {/* Test Connection Result */}
           {testResult && (
             <div
-              className="px-3 py-2 rounded-lg flex items-center gap-2"
+              className="px-3 py-2.5 rounded-lg flex items-center gap-2.5"
               style={{
-                backgroundColor: testResult.success ? 'rgba(34, 197, 94, 0.08)' : 'rgba(239, 68, 68, 0.08)',
+                backgroundColor: testResult.success ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                border: `1px solid ${testResult.success ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)'}`,
               }}
             >
-              {testResult.success ? (
-                <svg className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#22c55e' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              ) : (
-                <svg className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#ef4444' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              )}
-              <p className="text-[11px]" style={{ color: testResult.success ? '#22c55e' : '#ef4444' }}>
+              <div
+                className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{
+                  backgroundColor: testResult.success ? '#22c55e' : '#ef4444',
+                }}
+              >
+                {testResult.success ? (
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
+              </div>
+              <p className="text-xs font-medium" style={{ color: testResult.success ? '#16a34a' : '#dc2626' }}>
                 {testResult.message}
               </p>
             </div>
