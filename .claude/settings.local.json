@@ -15,7 +15,14 @@
       "Bash(task-master complexity-report:*)",
       "Bash(task-master expand:*)",
       "Bash(task-master list:*)",
-      "Bash(task-master show:*)"
+      "Bash(task-master show:*)",
+      "Bash(task-master set-status:*)",
+      "Bash(task-master next:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(task-master add-task:*)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
