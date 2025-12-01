@@ -96,7 +96,8 @@ const useEditorStore = create(
 
   // Remove a thread
   removeThread: (threadId) => set((state) => ({
-    threads: state.threads.filter(t => t.id !== threadId)
+    threads: state.threads.filter(t => t.id !== threadId),
+    activeThreadId: state.activeThreadId === threadId ? null : state.activeThreadId
   })),
 
   // Update thread properties

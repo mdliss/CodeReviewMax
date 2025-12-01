@@ -306,25 +306,23 @@ const ThreadConversation = ({ thread }) => {
 
 const ThreadIndicator = ({ thread, onClick, style }) => {
   const { activeThreadId, removeThread } = useEditorStore();
-  const [showMenu, setShowMenu] = useState(false);
 
   const isActive = activeThreadId === thread.id;
-  const messageCount = thread.messages.length;
 
   const handleDelete = (e) => {
     e.stopPropagation();
-    if (confirm('Delete this thread?')) {
+    e.preventDefault();
+    if (window.confirm('Delete this conversation?')) {
       removeThread(thread.id);
     }
-    setShowMenu(false);
   };
 
   const handleExport = (e) => {
     e.stopPropagation();
+    e.preventDefault();
     const markdown = exportThreadAsMarkdown(thread);
     const filename = `thread-L${thread.startLine}-${thread.endLine}-${Date.now()}.md`;
     downloadMarkdown(markdown, filename);
-    setShowMenu(false);
   };
 
   return (
@@ -386,62 +384,28 @@ const ThreadIndicator = ({ thread, onClick, style }) => {
             </p>
           </div>
 
-          {/* Menu button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowMenu(!showMenu);
-            }}
-            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1.5 rounded-md"
-            style={{
-              color: 'var(--text-muted)',
-              backgroundColor: showMenu ? 'var(--surface-muted)' : 'transparent'
-            }}
-            title="More options"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-            </svg>
-          </button>
+          {/* Action buttons */}
+          <div className="flex items-center flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-[10px]">
+            <button
+              onClick={handleExport}
+              className="px-1 rounded hover:bg-black/10 transition-colors"
+              style={{ color: 'var(--text-muted)' }}
+              title="Export"
+            >
+              ↓
+            </button>
+            <button
+              onClick={handleDelete}
+              className="px-1 rounded hover:bg-red-500/20 transition-colors"
+              style={{ color: 'var(--text-muted)' }}
+              title="Delete"
+            >
+              ×
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Thread menu */}
-      {showMenu && (
-        <div
-          className="absolute right-2 top-12 z-50 py-1 rounded-lg shadow-xl min-w-[160px]"
-          style={{
-            backgroundColor: 'var(--surface)',
-            border: '1px solid var(--border-color)',
-            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)'
-          }}
-        >
-          <button
-            onClick={handleExport}
-            className="w-full text-left px-3 py-2 text-xs font-medium transition-colors flex items-center gap-2"
-            style={{ color: 'var(--text-secondary)' }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--surface-muted)'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-          >
-            <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            <span>Export</span>
-          </button>
-          <button
-            onClick={handleDelete}
-            className="w-full text-left px-3 py-2 text-xs font-medium transition-colors flex items-center gap-2"
-            style={{ color: '#f87171' }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-          >
-            <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-            <span>Delete</span>
-          </button>
-        </div>
-      )}
     </div>
   );
 };
