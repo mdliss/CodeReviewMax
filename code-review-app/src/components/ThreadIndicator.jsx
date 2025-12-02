@@ -385,22 +385,30 @@ const ThreadIndicator = ({ thread, onClick, style }) => {
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-[10px]">
+          <div className="flex items-center gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
               onClick={handleExport}
-              className="px-1 rounded hover:bg-black/10 transition-colors"
-              style={{ color: 'var(--text-muted)' }}
+              className="px-2 py-0.5 rounded text-[10px] transition-colors"
+              style={{
+                backgroundColor: 'var(--surface-muted)',
+                color: 'var(--foreground)',
+                border: '1px solid var(--border-color)'
+              }}
               title="Export"
             >
-              ↓
+              Export
             </button>
             <button
               onClick={handleDelete}
-              className="px-1 rounded hover:bg-red-500/20 transition-colors"
-              style={{ color: 'var(--text-muted)' }}
+              className="px-2 py-0.5 rounded text-[10px] transition-colors"
+              style={{
+                backgroundColor: 'var(--surface-muted)',
+                color: 'var(--foreground)',
+                border: '1px solid var(--border-color)'
+              }}
               title="Delete"
             >
-              ×
+              Delete
             </button>
           </div>
         </div>
