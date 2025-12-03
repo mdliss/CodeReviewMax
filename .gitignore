@@ -77,3 +77,4 @@ opencode.json
 # MCP configs (may contain API keys)
 .mcp.json
 **/mcp.json 
+.vercel
