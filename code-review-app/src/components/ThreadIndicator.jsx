@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import useEditorStore from '../store/useEditorStore';
 import { queryAIStreaming, formatAIResponse } from '../services/aiService';
 
@@ -234,7 +235,9 @@ const ThreadConversation = ({ thread }) => {
                 </span>
                 <span>{new Date(msg.timestamp).toLocaleTimeString()}</span>
               </div>
-              <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+              <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0 prose-pre:my-2 prose-code:text-[var(--accent)] prose-code:bg-[var(--surface-muted)] prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none">
+                <ReactMarkdown>{msg.content}</ReactMarkdown>
+              </div>
             </div>
           </div>
         ))}
@@ -247,10 +250,10 @@ const ThreadConversation = ({ thread }) => {
                 <span className="animate-pulse">typing...</span>
               </div>
               {streamingText ? (
-                <p className="text-sm whitespace-pre-wrap leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                  {streamingText}
+                <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0 prose-pre:my-2 prose-code:text-[var(--accent)] prose-code:bg-[var(--surface-muted)] prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none" style={{ color: 'var(--text-secondary)' }}>
+                  <ReactMarkdown>{streamingText}</ReactMarkdown>
                   <span className="inline-block w-2 h-4 ml-0.5 animate-pulse" style={{ backgroundColor: 'var(--accent)' }}></span>
-                </p>
+                </div>
               ) : (
                 <div className="flex gap-1">
                   <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'var(--accent)', animationDelay: '0ms' }}></div>
