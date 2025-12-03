@@ -136,7 +136,7 @@ export const createOpenAIRequest = (selection, fullCode, userQuestion, model, co
     model: model || 'gpt-4o-mini',
     messages,
     temperature: 0.7,
-    max_tokens: 500
+    max_tokens: 2048
   };
 };
 
@@ -163,7 +163,7 @@ export const createAnthropicRequest = (selection, fullCode, userQuestion, model,
 
   return {
     model: model || 'claude-sonnet-4-5-20250929',
-    max_tokens: 500,
+    max_tokens: 2048,
     system: getSystemPrompt(),
     messages
   };
