@@ -22,7 +22,11 @@
       "Bash(task-master add-task:*)",
       "Bash(npm run build:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git log:*)",
+      "Bash(npm run lint)",
+      "Bash(cat:*)",
+      "Bash(mv:*)"
     ],
     "deny": [],
     "ask": []
